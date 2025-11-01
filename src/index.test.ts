@@ -124,6 +124,68 @@ describe('dateFromUUIDv7', () => {
         assert.strictEqual(dateFromUUIDv7(withSigns), null);
     });
 
+    it('returns null if HEX string length is not 32 characters long', ()=> {
+        const tooShort = '1234567890abcdef'; // 16 characters
+        assert.strictEqual(dateFromUUIDv7(tooShort), null);
+
+        const tooLong = '1234567890abcdef1234567890abcdef12'; // 34 characters
+        assert.strictEqual(dateFromUUIDv7(tooLong), null);
+    })
+
+    it('throws an error with a message of \'The entered UUID appears to be V1, but a UUIDv7 is required.\'', () => {
+        const v1UuidArray = [
+            'cc863758-b714-11f0-b576-c586e8619134',
+            'cc863b72-b714-11f0-b576-c586e8619134',
+            'cc863e74-b714-11f0-b576-c586e8619134',
+            'cc863f64-b714-11f0-b576-c586e8619134',
+            'cc864036-b714-11f0-b576-c586e8619134'
+        ];
+        
+        // Test each UUID v1 in the array
+        for (const v1Uuid of v1UuidArray) {
+            assert.throws(() => dateFromUUIDv7(v1Uuid), {
+                name: 'Error',
+                message: 'The entered UUID appears to be V1, but a UUIDv7 is required.'
+            });
+        }
+    })
+
+    it('throws an error with a message of \'The entered UUID appears to be V2, but a UUIDv7 is required.\'', () => {
+        const v2UuidArray = [
+            'e2a1f3c4-1d23-21f2-8f56-abcdef123456',
+            'f1b2d4e5-2e34-21a3-9c78-123456abcdef',
+            'a3c4b5d6-3f45-21b4-8a12-789abc456def',
+            'b4d5e6f7-4a56-21c5-8b34-456def123abc',
+            'c5e6f7a8-5b67-21d6-9d56-abcdef789123'
+        ]
+
+        // Test each UUID v2 in the array
+        for (const v2Uuid of v2UuidArray) {
+            assert.throws(() => dateFromUUIDv7(v2Uuid), {
+                name: 'Error',
+                message: 'The entered UUID appears to be V2, but a UUIDv7 is required.'
+            });
+        }
+    })
+
+    it('throws an error with a message of \'The entered UUID appears to be V3, but a UUIDv7 is required.\'', () => {
+        const v3UuidArray = [
+            '4384b27d-2698-3cad-8ecd-2b804a6dc803',
+            '4b5e4949-1838-35cd-97f8-1cea76b9c9e0',
+            'ff202ab9-4510-3381-b982-8e3f20311b59',
+            '6387c277-391f-3c16-8b52-3cd7847aa443',
+            '375c7f49-7604-34e6-bf90-42a8d83affa8'
+        ];
+
+        // Test each UUID v2 in the array
+        for (const v3Uuid of v3UuidArray) {
+            assert.throws(() => dateFromUUIDv7(v3Uuid), {
+                name: 'Error',
+                message: 'The entered UUID appears to be V3, but a UUIDv7 is required.'
+            });
+        }
+    })
+
 
         /*   it.skip('dateFromUUIDv7 - extracts date from valid UUIDv7', () => {
                // UUIDv7 with timestamp for 2024-01-01T00:00:00.000Z
