@@ -33,26 +33,25 @@ const dateFromUUIDv7=(uuid: unknown): Date | null => {
         if (version === '6') {
             throw new Error('The entered UUID appears to be V6, but a UUIDv7 is required.');
         }
+
+        // If it's a valid UUIDv7, process it
+        if (version === '7') {
+            try {
+                // First 12 hex digits = 48 bits of timestamp (milliseconds since epoch)
+                const hex = uuid.replace(/-/g, '');
+                const timestampHex = hex.slice(0, 12);
+                const timestampMs = parseInt(timestampHex, 16);
+
+                // Convert to Date
+                return new Date(timestampMs);
+            } catch {
+                return null;
+            }
+        }
     }
 
-    const hex = uuid.replace(/-/g, '');
-
-    // Returns null if not a HEX string (after removing hyphens)
-    if (!/^[0-9a-fA-F]+$/.test(hex)) return null;
-
-    // Returns null if not 32 characters long
-    if (hex.length !== 32) return null;
-
-    try {
-        // First 12 hex digits = 48 bits of timestamp (milliseconds since epoch)
-        const timestampHex = hex.slice(0, 12);
-        const timestampMs = parseInt(timestampHex, 16);
-
-        // Convert to Date
-        return new Date(timestampMs);
-    } catch {
-        return null;
-    }
+    // If it doesn't match UUID format at all, return null
+    return null;
 }
 
 export { dateFromUUIDv7 };

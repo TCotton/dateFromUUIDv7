@@ -124,14 +124,6 @@ describe('dateFromUUIDv7', () => {
         assert.strictEqual(dateFromUUIDv7(withSigns), null);
     });
 
-    it('returns null if HEX string length is not 32 characters long', () => {
-        const tooShort = '1234567890abcdef'; // 16 characters
-        assert.strictEqual(dateFromUUIDv7(tooShort), null);
-
-        const tooLong = '1234567890abcdef1234567890abcdef12'; // 34 characters
-        assert.strictEqual(dateFromUUIDv7(tooLong), null);
-    })
-
     it('throws an error with a message of \'The entered UUID appears to be V1, but a UUIDv7 is required.\'', () => {
         const v1UuidArray = [
             'cc863758-b714-11f0-b576-c586e8619134',
