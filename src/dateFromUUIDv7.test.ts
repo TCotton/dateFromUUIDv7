@@ -3,114 +3,69 @@ import { describe, it } from 'node:test';
 import { dateFromUUIDv7 } from './dateFromUUIDv7.js';
 
 describe('dateFromUUIDv7', () => {
-  it('throws an error if not a valid UUID format', () => {
+  it('returns undefined for invalid UUID format', () => {
     // Test string with non-hex characters
     const notAHex = 'not-a-hex';
-    assert.throws(() => dateFromUUIDv7(notAHex), {
-      name: 'Error',
-      message: 'Fails to match UUID format. Please check the input and try again.',
-    });
+    assert.strictEqual(dateFromUUIDv7(notAHex), undefined);
 
     // Test string with special characters
     const specialChars = '!@#$%^&*()';
-    assert.throws(() => dateFromUUIDv7(specialChars), {
-      name: 'Error',
-      message: 'Fails to match UUID format. Please check the input and try again.',
-    });
+    assert.strictEqual(dateFromUUIDv7(specialChars), undefined);
 
     // Test string with spaces
     const withSpaces = '123 456 789';
-    assert.throws(() => dateFromUUIDv7(withSpaces), {
-      name: 'Error',
-      message: 'Fails to match UUID format. Please check the input and try again.',
-    });
+    assert.strictEqual(dateFromUUIDv7(withSpaces), undefined);
 
     // Test string with letters outside hex range (g-z)
     const nonHexLetters = 'ghijklmnopqrstuvwxyz';
-    assert.throws(() => dateFromUUIDv7(nonHexLetters), {
-      name: 'Error',
-      message: 'Fails to match UUID format. Please check the input and try again.',
-    });
+    assert.strictEqual(dateFromUUIDv7(nonHexLetters), undefined);
 
     // Test string with mixed valid hex and invalid characters
     const mixedChars = '123abc-xyz-789';
-    assert.throws(() => dateFromUUIDv7(mixedChars), {
-      name: 'Error',
-      message: 'Fails to match UUID format. Please check the input and try again.',
-    });
+    assert.strictEqual(dateFromUUIDv7(mixedChars), undefined);
 
     // Test empty string
     const emptyString = '';
-    assert.throws(() => dateFromUUIDv7(emptyString), {
-      name: 'Error',
-      message: 'Fails to match UUID format. Please check the input and try again.',
-    });
+    assert.strictEqual(dateFromUUIDv7(emptyString), undefined);
 
     // Test string with only spaces
     const onlySpaces = '   ';
-    assert.throws(() => dateFromUUIDv7(onlySpaces), {
-      name: 'Error',
-      message: 'Fails to match UUID format. Please check the input and try again.',
-    });
+    assert.strictEqual(dateFromUUIDv7(onlySpaces), undefined);
 
     // Test string with newlines and tabs
     const whitespace = 'abc\n123\t456';
-    assert.throws(() => dateFromUUIDv7(whitespace), {
-      name: 'Error',
-      message: 'Fails to match UUID format. Please check the input and try again.',
-    });
+    assert.strictEqual(dateFromUUIDv7(whitespace), undefined);
 
     // Test string with unicode characters
     const unicode = '123αβγ456';
-    assert.throws(() => dateFromUUIDv7(unicode), {
-      name: 'Error',
-      message: 'Fails to match UUID format. Please check the input and try again.',
-    });
+    assert.strictEqual(dateFromUUIDv7(unicode), undefined);
 
     // Test string with emojis
     const emojis = '123🚀456🎉';
-    assert.throws(() => dateFromUUIDv7(emojis), {
-      name: 'Error',
-      message: 'Fails to match UUID format. Please check the input and try again.',
-    });
+    assert.strictEqual(dateFromUUIDv7(emojis), undefined);
 
     // Test string with numbers and punctuation
     const numbersAndPunctuation = '123.456,789';
-    assert.throws(() => dateFromUUIDv7(numbersAndPunctuation), {
-      name: 'Error',
-      message: 'Fails to match UUID format. Please check the input and try again.',
-    });
+    assert.strictEqual(dateFromUUIDv7(numbersAndPunctuation), undefined);
 
     // Test string with uppercase and lowercase mixed with invalid chars
     const mixedCase = 'AbC123XyZ';
-    assert.throws(() => dateFromUUIDv7(mixedCase), {
-      name: 'Error',
-      message: 'Fails to match UUID format. Please check the input and try again.',
-    });
+    assert.strictEqual(dateFromUUIDv7(mixedCase), undefined);
 
     // Test string that looks like UUID but has invalid characters
     const fakeUuid = '018cc251-f400-7000-8000-00000000000g';
-    assert.throws(() => dateFromUUIDv7(fakeUuid), {
-      name: 'Error',
-      message: 'Fails to match UUID format. Please check the input and try again.',
-    });
+    assert.strictEqual(dateFromUUIDv7(fakeUuid), undefined);
 
     // Test string with underscores
     const withUnderscores = '123_abc_def';
-    assert.throws(() => dateFromUUIDv7(withUnderscores), {
-      name: 'Error',
-      message: 'Fails to match UUID format. Please check the input and try again.',
-    });
+    assert.strictEqual(dateFromUUIDv7(withUnderscores), undefined);
 
     // Test string with plus and minus signs
     const withSigns = '+123-abc';
-    assert.throws(() => dateFromUUIDv7(withSigns), {
-      name: 'Error',
-      message: 'Fails to match UUID format. Please check the input and try again.',
-    });
+    assert.strictEqual(dateFromUUIDv7(withSigns), undefined);
   });
 
-  it("throws an error with a message of 'The entered UUID appears to be V1, but a UUIDv7 is required.'", () => {
+  it('returns undefined for UUIDs that are not version 7', () => {
     const v1UuidArray = [
       'cc863758-b714-11f0-b576-c586e8619134',
       'cc863b72-b714-11f0-b576-c586e8619134',
@@ -121,14 +76,9 @@ describe('dateFromUUIDv7', () => {
 
     // Test each UUID v1 in the array
     for (const v1Uuid of v1UuidArray) {
-      assert.throws(() => dateFromUUIDv7(v1Uuid), {
-        name: 'Error',
-        message: 'The entered UUID appears to be V1, but a UUIDv7 is required.',
-      });
+      assert.strictEqual(dateFromUUIDv7(v1Uuid), undefined);
     }
-  });
 
-  it("throws an error with a message of 'The entered UUID appears to be V2, but a UUIDv7 is required.'", () => {
     const v2UuidArray = [
       'e2a1f3c4-1d23-21f2-8f56-abcdef123456',
       'f1b2d4e5-2e34-21a3-9c78-123456abcdef',
@@ -139,14 +89,9 @@ describe('dateFromUUIDv7', () => {
 
     // Test each UUID v2 in the array
     for (const v2Uuid of v2UuidArray) {
-      assert.throws(() => dateFromUUIDv7(v2Uuid), {
-        name: 'Error',
-        message: 'The entered UUID appears to be V2, but a UUIDv7 is required.',
-      });
+      assert.strictEqual(dateFromUUIDv7(v2Uuid), undefined);
     }
-  });
 
-  it("throws an error with a message of 'The entered UUID appears to be V3, but a UUIDv7 is required.'", () => {
     const v3UuidArray = [
       '4384b27d-2698-3cad-8ecd-2b804a6dc803',
       '4b5e4949-1838-35cd-97f8-1cea76b9c9e0',
@@ -157,14 +102,9 @@ describe('dateFromUUIDv7', () => {
 
     // Test each UUID v3 in the array
     for (const v3Uuid of v3UuidArray) {
-      assert.throws(() => dateFromUUIDv7(v3Uuid), {
-        name: 'Error',
-        message: 'The entered UUID appears to be V3, but a UUIDv7 is required.',
-      });
+      assert.strictEqual(dateFromUUIDv7(v3Uuid), undefined);
     }
-  });
 
-  it("throws an error with a message of 'The entered UUID appears to be V4, but a UUIDv7 is required.'", () => {
     const v4UuidArray = [
       '8d5d59a0-b60b-4e2b-9d67-7c5ab53f9e5b',
       'ad2f0b7c-5c76-4f48-8f5a-9f2bba3a5f3a',
@@ -175,14 +115,9 @@ describe('dateFromUUIDv7', () => {
 
     // Test each UUID v4 in the array
     for (const v4Uuid of v4UuidArray) {
-      assert.throws(() => dateFromUUIDv7(v4Uuid), {
-        name: 'Error',
-        message: 'The entered UUID appears to be V4, but a UUIDv7 is required.',
-      });
+      assert.strictEqual(dateFromUUIDv7(v4Uuid), undefined);
     }
-  });
 
-  it("throws an error with a message of 'The entered UUID appears to be V5, but a UUIDv7 is required.'", () => {
     const v5UuidArray = [
       'a4b10451-0bda-5091-84d4-4eccefb8bc64',
       '2fc64824-7f44-57aa-8e5e-51e39c5d4ff8',
@@ -190,16 +125,12 @@ describe('dateFromUUIDv7', () => {
       '2d36c929-9466-52aa-9588-16f4515b6a92',
       '15215d4a-dfdb-5361-a44a-b1d97db0a8b1',
     ];
+
     // Test each UUID v5 in the array
     for (const v5Uuid of v5UuidArray) {
-      assert.throws(() => dateFromUUIDv7(v5Uuid), {
-        name: 'Error',
-        message: 'The entered UUID appears to be V5, but a UUIDv7 is required.',
-      });
+      assert.strictEqual(dateFromUUIDv7(v5Uuid), undefined);
     }
-  });
 
-  it("throws an error with a message of 'The entered UUID appears to be V6, but a UUIDv7 is required.'", () => {
     const v6UuidArray = [
       '1e2f3a4b-5c6d-6f78-90ab-cdef12345678',
       '2a3b4c5d-6e7f-6a8b-91cd-0123456789ab',
@@ -207,12 +138,10 @@ describe('dateFromUUIDv7', () => {
       '4d5e6f7a-8b9c-6c0d-93ef-1234567890ab',
       '5e6f7a8b-9c0d-6d1e-94f0-abcdef123456',
     ];
+
     // Test each UUID v6 in the array
     for (const v6Uuid of v6UuidArray) {
-      assert.throws(() => dateFromUUIDv7(v6Uuid), {
-        name: 'Error',
-        message: 'The entered UUID appears to be V6, but a UUIDv7 is required.',
-      });
+      assert.strictEqual(dateFromUUIDv7(v6Uuid), undefined);
     }
   });
 
@@ -220,7 +149,7 @@ describe('dateFromUUIDv7', () => {
     const uuidv7 = '018fd8fa-02d5-7c9a-8fb9-45d938b8f091';
     const result = dateFromUUIDv7(uuidv7);
 
-    assert.ok(result !== null);
+    assert.ok(result !== undefined);
     assert.ok(typeof result === 'object');
     assert.ok('dateToIsoString' in result);
     assert.ok('dateUTCTime' in result);
@@ -231,7 +160,7 @@ describe('dateFromUUIDv7', () => {
     const result = dateFromUUIDv7(uuidv7);
 
     // Test that it returns the correct object structure
-    assert.ok(result !== null);
+    assert.ok(result !== undefined);
     assert.ok(typeof result === 'object');
 
     // Test the timestamp value
@@ -275,7 +204,7 @@ describe('dateFromUUIDv7', () => {
       const result = dateFromUUIDv7(testCase.uuid);
 
       // Test that it returns the correct object structure
-      assert.ok(result !== null);
+      assert.ok(result !== undefined);
       assert.ok(typeof result === 'object');
 
       // Test that the timestamp is extracted correctly

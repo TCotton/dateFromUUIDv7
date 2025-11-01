@@ -1,7 +1,9 @@
-interface DateFromUUIDv7Result {
-  dateToIsoString: string;
-  dateUTCTime: number;
-}
+type DateFromUUIDv7Result =
+  | {
+      dateToIsoString: string;
+      dateUTCTime: number;
+    }
+  | undefined;
 
 const dateFromUUIDv7 = (uuid: string): DateFromUUIDv7Result => {
   // Check if the string matches UUID format (with hyphens) first
@@ -11,30 +13,6 @@ const dateFromUUIDv7 = (uuid: string): DateFromUUIDv7Result => {
   if (match) {
     // Extract the version from the UUID (13th character, or index 14 in the string with hyphens)
     const version = uuid.charAt(14);
-
-    if (version === '1') {
-      throw new Error('The entered UUID appears to be V1, but a UUIDv7 is required.');
-    }
-
-    if (version === '2') {
-      throw new Error('The entered UUID appears to be V2, but a UUIDv7 is required.');
-    }
-
-    if (version === '3') {
-      throw new Error('The entered UUID appears to be V3, but a UUIDv7 is required.');
-    }
-
-    if (version === '4') {
-      throw new Error('The entered UUID appears to be V4, but a UUIDv7 is required.');
-    }
-
-    if (version === '5') {
-      throw new Error('The entered UUID appears to be V5, but a UUIDv7 is required.');
-    }
-
-    if (version === '6') {
-      throw new Error('The entered UUID appears to be V6, but a UUIDv7 is required.');
-    }
 
     // If it's a valid UUIDv7, process it
     if (version === '7') {
@@ -51,13 +29,12 @@ const dateFromUUIDv7 = (uuid: string): DateFromUUIDv7Result => {
           dateUTCTime: date.getTime(),
         };
       } catch (error) {
-        throw new Error(error instanceof Error ? error.message : String(error));
+        if (error) {
+          return undefined;
+        }
       }
     }
   }
-
-  // If it doesn't match UUID format at all, throw an error
-  throw new Error('Fails to match UUID format. Please check the input and try again.');
 };
 
 export { dateFromUUIDv7, type DateFromUUIDv7Result };
