@@ -3,10 +3,10 @@ interface DateFromUUIDv7Result {
   dateUTCTime: number;
 }
 
-const dateFromUUIDv7 = (uuid: unknown): DateFromUUIDv7Result | null => {
-  if (typeof uuid !== 'string') return null;
+const dateFromUUIDv7 = (uuid: unknown): DateFromUUIDv7Result => {
+  if (typeof uuid !== 'string') throw new Error('The provided UUID must be a string.');
 
-  // Check if the string matches UUID format (with hyphens) first
+    // Check if the string matches UUID format (with hyphens) first
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-([1-7])[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   const match = uuid.match(uuidRegex);
 
@@ -52,14 +52,14 @@ const dateFromUUIDv7 = (uuid: unknown): DateFromUUIDv7Result | null => {
           dateToIsoString: date.toISOString(),
           dateUTCTime: date.getTime(),
         };
-      } catch {
-        return null;
+      } catch(error) {
+          throw new Error(error instanceof Error ? error.message : String(error));
       }
     }
   }
 
-  // If it doesn't match UUID format at all, return null
-  return null;
+  // If it doesn't match UUID format at all, throw an error
+    throw new Error('Fails to match UUID format. Please check the input and try again.');
 };
 
 export { dateFromUUIDv7, type DateFromUUIDv7Result };
