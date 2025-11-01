@@ -232,7 +232,7 @@ describe('dateFromUUIDv7', () => {
   it('returns a date object for valid UUIDv7', () => {
     const uuidv7 = '018fd8fa-02d5-7c9a-8fb9-45d938b8f091';
     const result = dateFromUUIDv7(uuidv7);
-    
+
     assert.ok(result !== null);
     assert.ok(typeof result === 'object');
     assert.ok('dateToIsoString' in result);

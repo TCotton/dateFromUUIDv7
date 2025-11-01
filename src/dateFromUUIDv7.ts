@@ -47,9 +47,10 @@ const dateFromUUIDv7 = (uuid: unknown): DateFromUUIDv7Result | null => {
         const timestampMs = parseInt(timestampHex, 16);
 
         // Convert to Date
+        const date = new Date(timestampMs);
         return {
-            dateToIsoString: new Date(timestampMs).toISOString(),
-            dateUTCTime: new Date(timestampMs).getTime(),
+          dateToIsoString: date.toISOString(),
+          dateUTCTime: date.getTime(),
         };
       } catch {
         return null;
@@ -61,4 +62,4 @@ const dateFromUUIDv7 = (uuid: unknown): DateFromUUIDv7Result | null => {
   return null;
 };
 
-export { dateFromUUIDv7, DateFromUUIDv7Result };
+export { dateFromUUIDv7, type DateFromUUIDv7Result };

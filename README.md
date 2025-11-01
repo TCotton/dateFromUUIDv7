@@ -4,10 +4,8 @@ A lightweight TypeScript utility library for handling UUIDv7 strings.
 
 ## Features
 
-- Extract date from UUIDv7 string - `dateFromUUIDv7(uuid: string): Object`
-- returns JSON object `{ dateToIsoString: string, dateUTCTime: number }`
-
-extracting dates from UUIDv7 strings.
+- Extract date from UUIDv7 string - `dateFromUUIDv7(uuid: unknown): DateFromUUIDv7Result | null`
+- returns JSON object `{ dateToIsoString: string, dateUTCTime: number } | null`
 
 ## Installation
 
