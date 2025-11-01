@@ -74,7 +74,6 @@ Extracts date information from a UUIDv7 string. UUIDv7 embeds a timestamp in the
   - `dateUTCTime`: UTC timestamp in milliseconds
 
 **Throws:**
-- `Error`: "The provided UUID must be a string." - If the input is not a string
 - `Error`: "Fails to match UUID format. Please check the input and try again." - If the string is not a valid UUID format
 - `Error`: "The entered UUID appears to be V[X], but a UUIDv7 is required." - If the UUID is valid but not version 7
 
