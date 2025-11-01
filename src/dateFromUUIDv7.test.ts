@@ -229,29 +229,29 @@ describe('dateFromUUIDv7', () => {
     }
   });
 
-  it('returns a Date object for valid UUIDv7', () => {
+  it('returns a date object for valid UUIDv7', () => {
     const uuidv7 = '018fd8fa-02d5-7c9a-8fb9-45d938b8f091';
-    const date = dateFromUUIDv7(uuidv7);
-    assert.ok(date instanceof Date);
+    const result = dateFromUUIDv7(uuidv7);
+    
+    assert.ok(result !== null);
+    assert.ok(typeof result === 'object');
+    assert.ok('dateToIsoString' in result);
+    assert.ok('dateUTCTime' in result);
   });
 
-  it('returns a Date object for valid UUIDv7 and correct timestamp extraction', () => {
+  it('returns a date object for valid UUIDv7 and correct timestamp extraction', () => {
     const uuidv7 = '018fd8fa-02d5-7c9a-8fb9-45d938b8f091';
-    const date = dateFromUUIDv7(uuidv7);
+    const result = dateFromUUIDv7(uuidv7);
 
-    assert.ok(date instanceof Date);
+    // Test that it returns the correct object structure
+    assert.ok(result !== null);
+    assert.ok(typeof result === 'object');
 
-    assert.strictEqual(date?.getTime(), 1717332214485);
+    // Test the timestamp value
+    assert.strictEqual(result?.dateUTCTime, 1717332214485);
 
-    assert.strictEqual(date?.toISOString(), '2024-06-02T12:43:34.485Z');
-
-    assert.strictEqual(date?.getUTCFullYear(), 2024);
-    assert.strictEqual(date?.getUTCMonth(), 5); // June (0-indexed)
-    assert.strictEqual(date?.getUTCDate(), 2);
-    assert.strictEqual(date?.getUTCHours(), 12);
-    assert.strictEqual(date?.getUTCMinutes(), 43);
-    assert.strictEqual(date?.getUTCSeconds(), 34);
-    assert.strictEqual(date?.getUTCMilliseconds(), 485);
+    // Test the ISO string representation
+    assert.strictEqual(result?.dateToIsoString, '2024-06-02T12:43:34.485Z');
   });
 
   it('returns a Date object for valid UUIDv7 in an array and correct timestamp extraction', () => {
@@ -285,16 +285,17 @@ describe('dateFromUUIDv7', () => {
 
     // Test each UUID v7 in the array
     for (const testCase of v7UuidTestCases) {
-      const date = dateFromUUIDv7(testCase.uuid);
+      const result = dateFromUUIDv7(testCase.uuid);
 
-      // Test that it returns a Date object
-      assert.ok(date instanceof Date);
+      // Test that it returns the correct object structure
+      assert.ok(result !== null);
+      assert.ok(typeof result === 'object');
 
       // Test that the timestamp is extracted correctly
-      assert.strictEqual(date?.getTime(), testCase.expectedTimestamp);
+      assert.strictEqual(result?.dateUTCTime, testCase.expectedTimestamp);
 
       // Test the ISO string representation
-      assert.strictEqual(date?.toISOString(), testCase.expectedISO);
+      assert.strictEqual(result?.dateToIsoString, testCase.expectedISO);
     }
   });
 });

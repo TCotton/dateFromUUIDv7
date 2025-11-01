@@ -1,4 +1,9 @@
-const dateFromUUIDv7 = (uuid: unknown): Date | null => {
+interface DateFromUUIDv7Result {
+  dateToIsoString: string;
+  dateUTCTime: number;
+}
+
+const dateFromUUIDv7 = (uuid: unknown): DateFromUUIDv7Result | null => {
   if (typeof uuid !== 'string') return null;
 
   // Check if the string matches UUID format (with hyphens) first
@@ -42,7 +47,10 @@ const dateFromUUIDv7 = (uuid: unknown): Date | null => {
         const timestampMs = parseInt(timestampHex, 16);
 
         // Convert to Date
-        return new Date(timestampMs);
+        return {
+            dateToIsoString: new Date(timestampMs).toISOString(),
+            dateUTCTime: new Date(timestampMs).getTime(),
+        };
       } catch {
         return null;
       }
@@ -53,4 +61,4 @@ const dateFromUUIDv7 = (uuid: unknown): Date | null => {
   return null;
 };
 
-export { dateFromUUIDv7 };
+export { dateFromUUIDv7, DateFromUUIDv7Result };
