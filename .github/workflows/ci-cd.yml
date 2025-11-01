@@ -110,6 +110,6 @@ jobs:
         body: |
           Release v${{ steps.version-check.outputs.current-version }}
           
-          Published to NPM: https://www.npmjs.com/package/datefromuuidv7
+          Published to NPM: https://www.npmjs.com/package/uuidv7-utilities
         draft: false
         prerelease: false
