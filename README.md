@@ -49,12 +49,12 @@ console.log(date.toISOString());
 
 ## API
 
-### `dateFromUUIDv7(uuid: string): Date`
+### `dateFromUUIDv7(uuid: unknown): Date | null`
 
 Extracts a Date object from a UUIDv7 string. UUIDv7 embeds a timestamp in the first 48 bits (6 bytes) representing milliseconds since Unix epoch.
 
 **Parameters:**
-- `uuid` (string): The UUIDv7 string to convert
+- `uuid` (unknown): The UUIDv7 string to convert. Accepts any type but only processes strings.
 
 **Returns:**
 - `Date`: Date object extracted from the UUID
