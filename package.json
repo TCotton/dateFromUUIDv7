@@ -1,5 +1,5 @@
 {
-  "name": "UUIDv7Utilities",
+  "name": "uuidv7-utilities",
   "version": "1.0.0",
   "description": "Converts UUIDv7 string to a date",
   "main": "dist/cjs/index.js",
@@ -48,7 +48,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/TCotton/dateFromUUIDv7"
+    "url": "git+https://github.com/TCotton/dateFromUUIDv7.git"
   },
   "publishConfig": {
     "access": "public"
