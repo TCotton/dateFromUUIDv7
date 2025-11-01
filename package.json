@@ -32,8 +32,8 @@
     "lint": "biome lint .",
     "lint:fix": "biome lint --write .",
     "check": "biome check --write .",
-    "test": "node --test dist/**/*.test.js",
-    "prepublishOnly": "npm run check && npm run build"
+    "test": "tsc -p tsconfig.json && node --test dist/**/*.test.js",
+    "prepublishOnly": " npm run check && npm run build"
   },
   "keywords": [
     "uuid",

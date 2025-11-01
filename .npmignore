@@ -16,6 +16,5 @@ node_modules/
 
 # Build artifacts not needed
 *.tsbuildinfo
-*.map
 dist/**/*.test.js
 dist/**/*.test.d.ts
