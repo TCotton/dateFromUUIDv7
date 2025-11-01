@@ -66,7 +66,7 @@ try {
 Extracts date information from a UUIDv7 string. UUIDv7 embeds a timestamp in the first 48 bits (6 bytes) representing milliseconds since Unix epoch.
 
 **Parameters:**
-- `uuid` (unknown): The UUID to convert (must be a valid UUIDv7 string)
+- `uuid` (string): The UUID to convert (must be a valid UUIDv7 string)
 
 **Returns:**
 - `DateFromUUIDv7Result`: Object with extracted date information
