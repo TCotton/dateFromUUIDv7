@@ -157,7 +157,7 @@ describe('dateFromUUIDv7', () => {
             'a3c4b5d6-3f45-21b4-8a12-789abc456def',
             'b4d5e6f7-4a56-21c5-8b34-456def123abc',
             'c5e6f7a8-5b67-21d6-9d56-abcdef789123'
-        ]
+        ];
 
         // Test each UUID v2 in the array
         for (const v2Uuid of v2UuidArray) {
@@ -183,6 +183,127 @@ describe('dateFromUUIDv7', () => {
                 name: 'Error',
                 message: 'The entered UUID appears to be V3, but a UUIDv7 is required.'
             });
+        }
+    })
+
+    it('throws an error with a message of \'The entered UUID appears to be V4, but a UUIDv7 is required.\'', () => {
+        const v4UuidArray = [
+            "8d5d59a0-b60b-4e2b-9d67-7c5ab53f9e5b",
+            "ad2f0b7c-5c76-4f48-8f5a-9f2bba3a5f3a",
+            "1f3e4b8b-6a12-4f0d-b6b9-29879dbd63f1",
+            "be17d42a-2e5e-4c44-a6ef-12b1b01931a7",
+            "c34b1ed2-90df-45e2-95c3-6c293de72dbe"
+        ];
+
+        // Test each UUID v4 in the array
+        for (const v4Uuid of v4UuidArray) {
+            assert.throws(() => dateFromUUIDv7(v4Uuid), {
+                name: 'Error',
+                message: 'The entered UUID appears to be V4, but a UUIDv7 is required.'
+            });
+        }
+    })
+
+    it('throws an error with a message of \'The entered UUID appears to be V5, but a UUIDv7 is required.\'', () => {
+        const v5UuidArray = [
+            "a4b10451-0bda-5091-84d4-4eccefb8bc64",
+            "2fc64824-7f44-57aa-8e5e-51e39c5d4ff8",
+            "b4f1f73c-87a4-5715-8357-261a89d26005",
+            "2d36c929-9466-52aa-9588-16f4515b6a92",
+            "15215d4a-dfdb-5361-a44a-b1d97db0a8b1"
+        ];
+        // Test each UUID v5 in the array
+        for (const v5Uuid of v5UuidArray) {
+            assert.throws(() => dateFromUUIDv7(v5Uuid), {
+                name: 'Error',
+                message: 'The entered UUID appears to be V5, but a UUIDv7 is required.'
+            });
+        }
+    })
+
+    it('throws an error with a message of \'The entered UUID appears to be V6, but a UUIDv7 is required.\'', () => {
+        const v6UuidArray = [
+            "1e2f3a4b-5c6d-6f78-90ab-cdef12345678",
+            "2a3b4c5d-6e7f-6a8b-91cd-0123456789ab",
+            "3c4d5e6f-7a8b-6b9c-92de-abcdef012345",
+            "4d5e6f7a-8b9c-6c0d-93ef-1234567890ab",
+            "5e6f7a8b-9c0d-6d1e-94f0-abcdef123456"
+        ];
+        // Test each UUID v6 in the array
+        for (const v6Uuid of v6UuidArray) {
+            assert.throws(() => dateFromUUIDv7(v6Uuid), {
+                name: 'Error',
+                message: 'The entered UUID appears to be V6, but a UUIDv7 is required.'
+            });
+        }
+    })
+
+    it('returns a Date object for valid UUIDv7', () => {
+        const uuidv7 = "018fd8fa-02d5-7c9a-8fb9-45d938b8f091";
+        const date = dateFromUUIDv7(uuidv7);
+        assert.ok(date instanceof Date);
+    })
+
+    it('returns a Date object for valid UUIDv7 and correct timestamp extraction', () => {
+        const uuidv7 = "018fd8fa-02d5-7c9a-8fb9-45d938b8f091";
+        const date = dateFromUUIDv7(uuidv7);
+        
+        assert.ok(date instanceof Date);
+        
+        assert.strictEqual(date?.getTime(), 1717332214485);
+
+        assert.strictEqual(date?.toISOString(), '2024-06-02T12:43:34.485Z');
+        
+        assert.strictEqual(date?.getUTCFullYear(), 2024);
+        assert.strictEqual(date?.getUTCMonth(), 5); // June (0-indexed)
+        assert.strictEqual(date?.getUTCDate(), 2);
+        assert.strictEqual(date?.getUTCHours(), 12);
+        assert.strictEqual(date?.getUTCMinutes(), 43);
+        assert.strictEqual(date?.getUTCSeconds(), 34);
+        assert.strictEqual(date?.getUTCMilliseconds(), 485);
+    })
+
+    it('returns a Date object for valid UUIDv7 in an array and correct timestamp extraction', () => {
+        const v7UuidTestCases = [
+            {
+                uuid: "018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1",
+                expectedTimestamp: 1717332184064,
+                expectedISO: "2024-06-02T12:43:04.064Z"
+            },
+            {
+                uuid: "018fd8fa-0b50-7a6d-8f25-5b12ce7a9032",
+                expectedTimestamp: 1717332216656,
+                expectedISO: "2024-06-02T12:43:36.656Z"
+            },
+            {
+                uuid: "018fd8fb-1122-7a9e-92d8-0cfe134ae487",
+                expectedTimestamp: 1717332283682,
+                expectedISO: "2024-06-02T12:44:43.682Z"
+            },
+            {
+                uuid: "018fd8fc-22d1-7ace-b321-4c92d7bb5fa6",
+                expectedTimestamp: 1717332353745,
+                expectedISO: "2024-06-02T12:45:53.745Z"
+            },
+            {
+                uuid: "018fd8fd-33e0-7af0-a054-d8e8bcf76e9c",
+                expectedTimestamp: 1717332423648,
+                expectedISO: "2024-06-02T12:47:03.648Z"
+            }
+        ];
+
+        // Test each UUID v7 in the array
+        for (const testCase of v7UuidTestCases) {
+            const date = dateFromUUIDv7(testCase.uuid);
+            
+            // Test that it returns a Date object
+            assert.ok(date instanceof Date);
+            
+            // Test that the timestamp is extracted correctly
+            assert.strictEqual(date?.getTime(), testCase.expectedTimestamp);
+            
+            // Test the ISO string representation
+            assert.strictEqual(date?.toISOString(), testCase.expectedISO);
         }
     })
 

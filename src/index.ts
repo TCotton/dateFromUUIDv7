@@ -2,15 +2,7 @@
 const dateFromUUIDv7=(uuid: unknown): Date | null => {
     if (typeof uuid !== 'string') return null;
 
-    const hex = uuid.replace(/-/g, '');
-
-    // Returns null if not a HEX string
-    if (!/^[0-9a-fA-F]+$/.test(hex)) return null;
-
-    // Returns null if not 32 characters long
-    if (hex.length !== 32) return null;
-
-    // Check if the string matches UUID format (with hyphens)
+    // Check if the string matches UUID format (with hyphens) first
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-([1-7])[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     const match = uuid.match(uuidRegex);
 
@@ -34,10 +26,27 @@ const dateFromUUIDv7=(uuid: unknown): Date | null => {
             throw new Error('The entered UUID appears to be V4, but a UUIDv7 is required.');
         }
 
+        if (version === '5') {
+            throw new Error('The entered UUID appears to be V5, but a UUIDv7 is required.');
+        }
+
+        if (version === '6') {
+            throw new Error('The entered UUID appears to be V6, but a UUIDv7 is required.');
+        }
+
+
         if (version !== '7') {
-            return null; // Not a UUIDv7, but not V1 either
+            return null; // Not a UUIDv7, but not one of the specific versions above
         }
     }
+
+    const hex = uuid.replace(/-/g, '');
+
+    // Returns null if not a HEX string (after removing hyphens)
+    if (!/^[0-9a-fA-F]+$/.test(hex)) return null;
+
+    // Returns null if not 32 characters long
+    if (hex.length !== 32) return null;
 
     try {
         // First 12 hex digits = 48 bits of timestamp (milliseconds since epoch)
