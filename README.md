@@ -29,7 +29,7 @@ However, beware that node `crypto.randomUUID()` and the PostgresQL `gen_random_u
 
 From PostgreSQL 18, use the `uuidv7()` function instead of `gen_random_uuid()` to generate a UUID for a primary key, ex: `user_id       UUID PRIMARY KEY     DEFAULT uuidv7()`
 
-Using this function, you can extact the timestamp from the UUIDv7. It will error if UUID versions under 7 are used, with clear error messages.
+Using the `dateFromUUIDv7` function, you can extract the timestamp from the UUIDv7. It will error if UUID versions under 7 are used, with clear error messages. The `uuidVersionValidation` function will return the UUID version number, from 1 to 7.
 
 ## Usage
 
@@ -77,7 +77,7 @@ Extracts date information from a UUIDv7 string. UUIDv7 embeds a timestamp in the
 
 ### `uuidVersionValidation(uuid: string): UUIDVersionTuple`
 
-Validates that the UUID is a valid UUIDv7 string.
+Returns the UUID version number, from 1 to 7.
 
 **Parameters:**
 - `uuid` (string): The UUID to validate
@@ -88,7 +88,6 @@ Validates that the UUID is a valid UUIDv7 string.
 
 ## About UUIDv7
 
-UUIDv7 is a time-ordered UUID format that includes a timestamp in the first 48 bits. This library extracts that timestamp and converts it to a JavaScript Date object.
 You can read more about UUIDv7 here: [UUIDv7: The Fast, Unique, Ordered Identifier Every Scalable System Needs](https://medium.com/@zahrazolfaghari00/uuidv7-the-fast-unique-ordered-identifier-every-scalable-system-needs-999e57eb0104).
 
 ## Development
