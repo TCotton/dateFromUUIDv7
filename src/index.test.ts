@@ -1,6 +1,6 @@
 import assert from 'node:assert';
-import { describe, it } from 'node:test';
-import { dateFromUUIDv7 } from './index.js';
+import {describe, it} from 'node:test';
+import {dateFromUUIDv7} from './index.js';
 
 describe('dateFromUUIDv7', () => {
 
@@ -26,7 +26,7 @@ describe('dateFromUUIDv7', () => {
         assert.strictEqual(dateFromUUIDv7(undefinedValue), null);
 
         // Test object
-        const object = { key: 'value' };
+        const object = {key: 'value'};
         assert.strictEqual(dateFromUUIDv7(object), null);
 
         // Test array
@@ -140,7 +140,7 @@ describe('dateFromUUIDv7', () => {
             'cc863f64-b714-11f0-b576-c586e8619134',
             'cc864036-b714-11f0-b576-c586e8619134'
         ];
-        
+
         // Test each UUID v1 in the array
         for (const v1Uuid of v1UuidArray) {
             assert.throws(() => dateFromUUIDv7(v1Uuid), {
@@ -247,13 +247,13 @@ describe('dateFromUUIDv7', () => {
     it('returns a Date object for valid UUIDv7 and correct timestamp extraction', () => {
         const uuidv7 = "018fd8fa-02d5-7c9a-8fb9-45d938b8f091";
         const date = dateFromUUIDv7(uuidv7);
-        
+
         assert.ok(date instanceof Date);
-        
+
         assert.strictEqual(date?.getTime(), 1717332214485);
 
         assert.strictEqual(date?.toISOString(), '2024-06-02T12:43:34.485Z');
-        
+
         assert.strictEqual(date?.getUTCFullYear(), 2024);
         assert.strictEqual(date?.getUTCMonth(), 5); // June (0-indexed)
         assert.strictEqual(date?.getUTCDate(), 2);
@@ -295,53 +295,15 @@ describe('dateFromUUIDv7', () => {
         // Test each UUID v7 in the array
         for (const testCase of v7UuidTestCases) {
             const date = dateFromUUIDv7(testCase.uuid);
-            
+
             // Test that it returns a Date object
             assert.ok(date instanceof Date);
-            
+
             // Test that the timestamp is extracted correctly
             assert.strictEqual(date?.getTime(), testCase.expectedTimestamp);
-            
+
             // Test the ISO string representation
             assert.strictEqual(date?.toISOString(), testCase.expectedISO);
         }
     })
-
-
-        /*   it.skip('dateFromUUIDv7 - extracts date from valid UUIDv7', () => {
-               // UUIDv7 with timestamp for 2024-01-01T00:00:00.000Z
-               // Timestamp: 1704067200000 (0x018cc251f400)
-               const uuid = '018cc251-f400-7000-8000-000000000000';
-               const date = dateFromUUIDv7(uuid);
-
-               assert.strictEqual(date.getTime(), 1704067200000);
-           });
-
-           it('dateFromUUIDv7 - throws error for invalid UUID format', () => {
-               const invalidUuid = 'not-a-uuid';
-
-               assert.throws(() => dateFromUUIDv7(invalidUuid), {
-                   name: 'Error',
-                   message: 'Invalid UUIDv7 format',
-               });
-           });
-
-           it('dateFromUUIDv7 - throws error for non-UUIDv7 (wrong version)', () => {
-               // UUID with version 4 instead of 7
-               const uuidv4 = '018cfdf8-8000-4000-8000-000000000000';
-
-               assert.throws(() => dateFromUUIDv7(uuidv4), {
-                   name: 'Error',
-                   message: 'Invalid UUIDv7 format',
-               });
-           });
-
-           it.skip('dateFromUUIDv7 - handles different timestamps correctly', () => {
-               // Timestamp: 1700000000000 (0x018bcfe56800)
-               const uuid = '018bcfe5-6800-7000-8000-000000000000';
-               const date = dateFromUUIDv7(uuid);
-
-               assert.strictEqual(date.getTime(), 1700000000000);
-           });*/
-
 })
