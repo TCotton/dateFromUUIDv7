@@ -75,7 +75,7 @@ Extracts date information from a UUIDv7 string. UUIDv7 embeds a timestamp in the
     - `dateUTCTime`: UTC timestamp in milliseconds
     - `undefined`: If the UUID is not a valid UUIDv7 string
 
-### `uuidVersionValidation(uuid: string): DateFromUUIDv7Result`
+### `uuidVersionValidation(uuid: string): UUIDVersionTuple`
 
 Validates that the UUID is a valid UUIDv7 string.
 
