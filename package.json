@@ -1,5 +1,5 @@
 {
-  "name": "UUIDv7 Utilities",
+  "name": "UUIDv7Utilities",
   "version": "1.0.0",
   "description": "Converts UUIDv7 string to a date",
   "main": "dist/cjs/index.js",
