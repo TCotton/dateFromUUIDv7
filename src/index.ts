@@ -1,16 +1,11 @@
 
-const dateFromUUIDv7=<T>(uuid: T): Date | null => {
-    // Use both TypeScript and native JavaScript to check the type of the input
-    const objectType = Object.prototype.toString.call(uuid).slice(8, -1)
-
-    // Returns null if not a string
-    if (objectType !== 'String') return null;
+const dateFromUUIDv7=(uuid: unknown): Date | null => {
     if (typeof uuid !== 'string') return null;
 
     const hex = uuid.replace(/-/g, '');
 
     // Returns null if not a HEX string
-    if (!/^[0-9a-fA-F]+$/.test(hex)) return null
+    if (!/^[0-9a-fA-F]+$/.test(hex)) return null;
 
     // Returns null if not 32 characters long
     if (hex.length !== 32) return null;

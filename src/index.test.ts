@@ -124,7 +124,7 @@ describe('dateFromUUIDv7', () => {
         assert.strictEqual(dateFromUUIDv7(withSigns), null);
     });
 
-    it('returns null if HEX string length is not 32 characters long', ()=> {
+    it('returns null if HEX string length is not 32 characters long', () => {
         const tooShort = '1234567890abcdef'; // 16 characters
         assert.strictEqual(dateFromUUIDv7(tooShort), null);
 
@@ -177,7 +177,7 @@ describe('dateFromUUIDv7', () => {
             '375c7f49-7604-34e6-bf90-42a8d83affa8'
         ];
 
-        // Test each UUID v2 in the array
+        // Test each UUID v3 in the array
         for (const v3Uuid of v3UuidArray) {
             assert.throws(() => dateFromUUIDv7(v3Uuid), {
                 name: 'Error',
