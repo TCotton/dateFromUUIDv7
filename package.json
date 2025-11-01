@@ -29,7 +29,7 @@
     "lint": "biome lint .",
     "lint:fix": "biome lint --write .",
     "check": "biome check --write .",
-    "test": "tsc -p tsconfig.cjs.json && node --test dist/cjs/*.test.js",
+    "test": "tsc -p tsconfig.test.json && node --test dist/test/*.test.js",
     "prepublishOnly": " npm run check && npm run build"
   },
   "keywords": [
