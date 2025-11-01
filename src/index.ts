@@ -33,11 +33,6 @@ const dateFromUUIDv7=(uuid: unknown): Date | null => {
         if (version === '6') {
             throw new Error('The entered UUID appears to be V6, but a UUIDv7 is required.');
         }
-
-
-        if (version !== '7') {
-            return null; // Not a UUIDv7, but not one of the specific versions above
-        }
     }
 
     const hex = uuid.replace(/-/g, '');
