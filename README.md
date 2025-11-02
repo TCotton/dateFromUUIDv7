@@ -5,7 +5,7 @@ A lightweight TypeScript utility library for handling UUIDv7 strings.
 ## Features
 
 - Extract date from UUIDv7 string - `dateFromUUIDv7(uuid: string): DateFromUUIDv7Result`
-- returns JSON object `{ dateToIsoString: string, dateUTCTime: number }`
+- returns JSON object `{ dateToIsoString: string, dateUnixEpoch: number, dateToUTCString: string } | undefined`
 
 - Find version number from UUID string - `uuidVersionValidation(uuid: string): UUIDVersionTuple`
 - returns string `'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7' | undefined`
@@ -31,7 +31,7 @@ From PostgreSQL 18, use the `uuidv7()` function instead of `gen_random_uuid()` t
 
 A UUID v7 creation NPM library is [uuidv7](https://www.npmjs.com/package/uuidv7) by [LiosK](https://github.com/LiosK).
 
-Using the `dateFromUUIDv7` function, you can extract the timestamp from the UUIDv7. It will error if UUID versions under 7 are used, with clear error messages. The `uuidVersionValidation` function will return the UUID version number, from 1 to 7.
+Using the `dateFromUUIDv7` function, you can extract the timestamp from the UUIDv7. It will return `undefined` if the UUID is not a valid UUIDv7. The `uuidVersionValidation` function will return the UUID version number, from 1 to 7.
 
 ## Usage
 
@@ -44,8 +44,9 @@ const uuid = uuidVersionValidation(uuidString);
 if (uuid === 'v7') {
     const result = dateFromUUIDv7(uuidString);
     if (result) {
-        console.log(result.dateToIsoString);
-        console.log(result.dateUTCTime);
+        console.log(result.dateToIsoString);     // '2024-06-02T12:43:04.064Z'
+        console.log(result.dateUnixEpoch);       // 1717332184064
+        console.log(result.dateToUTCString);     // 'Sun, 02 Jun 2024 12:43:04 GMT'
     }
 }
 ```
@@ -60,8 +61,9 @@ const uuid = uuidVersionValidation(uuidString);
 if (uuid === 'v7') {
     const result = dateFromUUIDv7(uuidString);
     if (result) {
-        console.log(result.dateToIsoString);
-        console.log(result.dateUTCTime);
+        console.log(result.dateToIsoString);     // '2024-06-02T12:43:04.064Z'
+        console.log(result.dateUnixEpoch);       // 1717332184064
+        console.log(result.dateToUTCString);     // 'Sun, 02 Jun 2024 12:43:04 GMT'
     }
 }
 ```
@@ -77,9 +79,10 @@ Extracts date information from a UUIDv7 string. UUIDv7 embeds a timestamp in the
 
 **Returns:**
 - `DateFromUUIDv7Result`: Object with extracted date information
-    - `dateToIsoString`: ISO 8601 formatted date string
-    - `dateUTCTime`: UTC timestamp in milliseconds
-    - `undefined`: If the UUID is not a valid UUIDv7 string
+    - `dateToIsoString`: ISO 8601 formatted date string (e.g., '2024-06-02T12:43:04.064Z')
+    - `dateUnixEpoch`: Unix timestamp in milliseconds (e.g., 1717332184064)
+    - `dateToUTCString`: UTC date string (e.g., 'Sun, 02 Jun 2024 12:43:04 GMT')
+- `undefined`: If the UUID is not a valid UUIDv7 string
 
 ### `uuidVersionValidation(uuid: string): UUIDVersionTuple`
 

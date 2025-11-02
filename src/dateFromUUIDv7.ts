@@ -1,7 +1,8 @@
 type DateFromUUIDv7Result =
   | {
       dateToIsoString: string;
-      dateUTCTime: number;
+      dateUnixEpoch: number;
+      dateToUTCString: string;
     }
   | undefined;
 
@@ -26,7 +27,8 @@ const dateFromUUIDv7 = (uuid: string): DateFromUUIDv7Result => {
         const date = new Date(timestampMs);
         return {
           dateToIsoString: date.toISOString(),
-          dateUTCTime: date.getTime(),
+          dateUnixEpoch: date.getTime(),
+          dateToUTCString: date.toUTCString(),
         };
       } catch (_error) {
         return undefined;

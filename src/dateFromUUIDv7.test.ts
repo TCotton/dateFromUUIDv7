@@ -152,7 +152,8 @@ describe('dateFromUUIDv7', () => {
     assert.ok(result !== undefined);
     assert.ok(typeof result === 'object');
     assert.ok('dateToIsoString' in result);
-    assert.ok('dateUTCTime' in result);
+    assert.ok('dateUnixEpoch' in result);
+    assert.ok('dateToUTCString' in result);
   });
 
   it('returns a date object for valid UUIDv7 and correct timestamp extraction', () => {
@@ -164,10 +165,13 @@ describe('dateFromUUIDv7', () => {
     assert.ok(typeof result === 'object');
 
     // Test the timestamp value
-    assert.strictEqual(result?.dateUTCTime, 1717332214485);
+    assert.strictEqual(result?.dateUnixEpoch, 1717332214485);
 
     // Test the ISO string representation
     assert.strictEqual(result?.dateToIsoString, '2024-06-02T12:43:34.485Z');
+
+    // Test the UTC string representation
+    assert.strictEqual(result?.dateToUTCString, 'Sun, 02 Jun 2024 12:43:34 GMT');
   });
 
   it('returns a Date object for valid UUIDv7 in an array and correct timestamp extraction', () => {
@@ -176,26 +180,31 @@ describe('dateFromUUIDv7', () => {
         uuid: '018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1',
         expectedTimestamp: 1717332184064,
         expectedISO: '2024-06-02T12:43:04.064Z',
+        expectedUTC: 'Sun, 02 Jun 2024 12:43:04 GMT',
       },
       {
         uuid: '018fd8fa-0b50-7a6d-8f25-5b12ce7a9032',
         expectedTimestamp: 1717332216656,
         expectedISO: '2024-06-02T12:43:36.656Z',
+        expectedUTC: 'Sun, 02 Jun 2024 12:43:36 GMT',
       },
       {
         uuid: '018fd8fb-1122-7a9e-92d8-0cfe134ae487',
         expectedTimestamp: 1717332283682,
         expectedISO: '2024-06-02T12:44:43.682Z',
+        expectedUTC: 'Sun, 02 Jun 2024 12:44:43 GMT',
       },
       {
         uuid: '018fd8fc-22d1-7ace-b321-4c92d7bb5fa6',
         expectedTimestamp: 1717332353745,
         expectedISO: '2024-06-02T12:45:53.745Z',
+        expectedUTC: 'Sun, 02 Jun 2024 12:45:53 GMT',
       },
       {
         uuid: '018fd8fd-33e0-7af0-a054-d8e8bcf76e9c',
         expectedTimestamp: 1717332423648,
         expectedISO: '2024-06-02T12:47:03.648Z',
+        expectedUTC: 'Sun, 02 Jun 2024 12:47:03 GMT',
       },
     ];
 
@@ -208,10 +217,13 @@ describe('dateFromUUIDv7', () => {
       assert.ok(typeof result === 'object');
 
       // Test that the timestamp is extracted correctly
-      assert.strictEqual(result?.dateUTCTime, testCase.expectedTimestamp);
+      assert.strictEqual(result?.dateUnixEpoch, testCase.expectedTimestamp);
 
       // Test the ISO string representation
       assert.strictEqual(result?.dateToIsoString, testCase.expectedISO);
+
+      // Test the UTC string representation
+      assert.strictEqual(result?.dateToUTCString, testCase.expectedUTC);
     }
   });
 });
