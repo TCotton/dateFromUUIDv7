@@ -63,7 +63,7 @@ if (result) {
     console.log(result.dateToIsoString);     // '2024-06-02T12:43:04.064Z'
     console.log(result.dateUnixEpoch);       // 1717332184064
     console.log(result.dateToUTCString);     // 'Sun, 02 Jun 2024 12:43:04 GMT'
-    }
+}
 ```
 
 ### CommonJS
