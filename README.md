@@ -87,14 +87,14 @@ Extracts date information from a UUIDv7 string. UUIDv7 embeds a timestamp in the
 
 ### `uuidVersionValidation(uuid: string): UUIDVersionTuple`
 
-Returns the UUID version, from 1 to 8, or the string `'NilUUID'` or `'MaxUUID'`, and `undefined` if the UUID is not a valid UUIDv7 string.
+Returns the UUID version, from 1 to 8, or the string `'NilUUID'` or `'MaxUUID'`, and `undefined` if the UUID is not a valid UUID string.
 
 **Parameters:**
 - `uuid` (string): The UUID to validate
 
 **Returns:**
 - `string`: The UUID version number, ex: `'v7'`
-- `undefined`: If the UUID is not a valid UUIDv7 string
+- `undefined`: If the UUID is not a valid UUID string
 
 ## About UUIDv7
 
