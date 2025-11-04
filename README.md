@@ -8,7 +8,8 @@ A lightweight TypeScript utility library for handling UUIDv7 strings.
 - returns JSON object `{ dateToIsoString: string, dateUnixEpoch: number, dateToUTCString: string } | undefined`
 
 - Find version number from UUID string - `uuidVersionValidation(uuid: string): UUIDVersionTuple`
-- returns string `'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7' | undefined`
+- returns string `'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7' |  'v8' | 'NilUUID' | 'MaxUUID' | undefined
+- this conforms to [RFC 9562 Universally Unique Identifiers (UUIDs)](https://www.rfc-editor.org/rfc/rfc9562.html)
 
 ## Installation
 
