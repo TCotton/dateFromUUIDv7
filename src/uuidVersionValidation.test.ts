@@ -94,6 +94,45 @@ describe('uuidVersionValidation', () => {
     }
   });
 
+  it('should return v8 for a version 8 UUID', () => {
+    const v8UuidArray = [
+      'd8a1c4e2-12f3-8a4b-91de-5f63bc7a249e',
+      'e9b2d5f3-23a4-8b5c-82ef-6a74cd8b35af',
+      'fab3e6d4-34b5-8c6d-93f0-7b85de9c46b0',
+      '0bc4f7e5-45c6-8d7e-a401-8c96efa357c1',
+      '1cd508f6-56d7-8e8f-b512-9da7f0b468d2',
+    ];
+    for (const v8Uuid of v8UuidArray) {
+      assert.strictEqual(uuidVersionValidation(v8Uuid), 'v8');
+    }
+  });
+
+  it('should return NilUUID for the nil UUID', () => {
+    const NilUUIDArray = [
+      '00000000-0000-0000-0000-000000000000',
+      '00000000-0000-0000-0000-000000000000',
+      '00000000-0000-0000-0000-000000000000',
+      '00000000-0000-0000-0000-000000000000',
+      '00000000-0000-0000-0000-000000000000',
+    ];
+    for (const NilUUID of NilUUIDArray) {
+      assert.strictEqual(uuidVersionValidation(NilUUID), 'NilUUID');
+    }
+  });
+
+  it('should return MaxUUID for the max UUID', () => {
+    const MaxUUIDArray = [
+      'ffffffff-ffff-ffff-ffff-ffffffffffff',
+      'ffffffff-ffff-ffff-ffff-ffffffffffff',
+      'ffffffff-ffff-ffff-ffff-ffffffffffff',
+      'ffffffff-ffff-ffff-ffff-ffffffffffff',
+      'FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF',
+    ];
+    for (const MaxUUID of MaxUUIDArray) {
+      assert.strictEqual(uuidVersionValidation(MaxUUID), 'MaxUUID');
+    }
+  });
+
   it('should return undefined for an invalid UUID', () => {
     const invalidUuidArray = [
       '018fd8f9-8c00-a4c-8a47-1a6ds4b90f3a1',
