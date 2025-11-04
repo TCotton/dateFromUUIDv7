@@ -32,7 +32,7 @@ From PostgreSQL 18, use the `uuidv7()` function instead of `gen_random_uuid()` t
 
 A UUID v7 creation NPM library is [uuidv7](https://www.npmjs.com/package/uuidv7) by [LiosK](https://github.com/LiosK).
 
-Using the `dateFromUUIDv7` function, you can extract the timestamp from the UUIDv7. It will return `undefined` if the UUID is not a valid UUIDv7. The `uuidVersionValidation` function will return the UUID version from 1 to 8, or the string `'NilUUID'` or `'MaxUUID'`, and `undefined` if the UUID is not a valid UUIDv7 string.
+Using the `dateFromUUIDv7` function, you can extract the timestamp from the UUIDv7. It will return `undefined` if the UUID is not a valid UUID string. The `uuidVersionValidation` function will return the UUID version from 1 to 8, or the string `'NilUUID'` or `'MaxUUID'`, and `undefined` if the UUID is not a valid UUID string.
 
 ## Usage
 
@@ -83,11 +83,11 @@ Extracts date information from a UUIDv7 string. UUIDv7 embeds a timestamp in the
     - `dateToIsoString`: ISO 8601 formatted date string (e.g., '2024-06-02T12:43:04.064Z')
     - `dateUnixEpoch`: Unix timestamp in milliseconds (e.g., 1717332184064)
     - `dateToUTCString`: UTC date string (e.g., 'Sun, 02 Jun 2024 12:43:04 GMT')
-- `undefined`: If the UUID is not a valid UUIDv7 string
+- `undefined`: If the UUID is not a valid UUID string
 
 ### `uuidVersionValidation(uuid: string): UUIDVersionTuple`
 
-Returns the UUID version, from 1 to 8, or the string `'NilUUID'` or `'MaxUUID'`, and `undefined` if the UUID is not a valid UUIDv7 string.
+Returns the UUID version, from 1 to 8, or the string `'NilUUID'` or `'MaxUUID'`, and `undefined` if the UUID is not a valid UUID string.
 
 **Parameters:**
 - `uuid` (string): The UUID to validate
