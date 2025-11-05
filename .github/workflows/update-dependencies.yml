@@ -1,0 +1,68 @@
+name: Update Minor Dependencies
+
+on:
+  schedule:
+    # Run every Monday at 9:00 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  update-dependencies:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install current dependencies
+        run: npm ci
+
+      - name: Update dependencies
+        run: npm update
+
+      - name: Run tests to ensure updates don't break anything
+        run: npm test
+
+      - name: Check for changes in package-lock.json
+        id: check-changes
+        run: |
+          if git diff --exit-code package-lock.json; then
+            echo "changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Pull Request
+        if: steps.check-changes.outputs.changes == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: update minor dependencies'
+          title: 'chore: update minor dependencies'
+          body: |
+            This PR was automatically created to update minor dependencies.
+            
+            ## Changes
+            - Updated dependencies using `npm update`
+            - All tests are passing
+            
+            ## Verification
+            The automated tests have been run and are passing. Please review the changes in `package-lock.json` to ensure the updates are appropriate.
+            
+            Auto-generated on: ${{ github.run_id }}
+          branch: update-dependencies-${{ github.run_number }}
+          delete-branch: true
+          labels: |
+            dependencies
+            automated
