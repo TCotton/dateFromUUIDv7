@@ -7,8 +7,9 @@ A lightweight TypeScript utility library for handling UUIDv7 strings.
 - Extract date from UUIDv7 string - `dateFromUUIDv7(uuid: string): DateFromUUIDv7Result`
 - returns JSON object `{ dateToIsoString: string, dateUnixEpoch: number, dateToUTCString: string } | undefined`
 
-- Find version number from UUID string - `uuidVersionValidation(uuid: string): UUIDVersionTuple`
-- returns string `'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7' |  'v8' | 'NilUUID' | 'MaxUUID' | undefined`
+- Find version number from UUID string - `uuidVersionValidation(uuid: string, versionNumber?: number): UUIDVersionTuple`
+- returns string `'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7' |  'v8' | 'NilUUID' | 'MaxUUID' | undefined` when called without the optional parameter
+- returns boolean `true | false` when called with the optional `versionNumber` parameter to check for a specific version
 - this conforms to [RFC 9562 Universally Unique Identifiers (UUIDs)](https://www.rfc-editor.org/rfc/rfc9562.html)
 
 ## Installation
@@ -65,6 +66,15 @@ if (result) {
     console.log(result.dateToUTCString);     // 'Sun, 02 Jun 2024 12:43:04 GMT'
 }
 ```
+You can also pass an optional `versionNumber` parameter to `uuidVersionValidation` to check for a specific version.
+
+```typescript
+import { uuidVersionValidation } from 'uuidv7-utilities';
+
+const uuidString = '018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1';
+const uuid = uuidVersionValidation(uuidString, 7);
+console.log(uuid);  // true
+```
 
 ### CommonJS
 
@@ -72,8 +82,9 @@ if (result) {
 const { dateFromUUIDv7, uuidVersionValidation } = require('uuidv7-utilities');
 
 const uuidString = '018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1';
-const uuid = uuidVersionValidation(uuidString);
-if (uuid === 'v7') {
+
+// Check if it's a version 7 UUID using boolean return
+if (uuidVersionValidation(uuidString, 7)) {
     const result = dateFromUUIDv7(uuidString);
     if (result) {
         console.log(result.dateToIsoString);     // '2024-06-02T12:43:04.064Z'
@@ -99,16 +110,35 @@ Extracts date information from a UUIDv7 string. UUIDv7 embeds a timestamp in the
     - `dateToUTCString`: UTC date string (e.g., 'Sun, 02 Jun 2024 12:43:04 GMT')
 - `undefined`: If the UUID is not a valid UUID string
 
-### `uuidVersionValidation(uuid: string): UUIDVersionTuple`
+### `uuidVersionValidation(uuid: string, versionNumber?: number): UUIDVersionTuple`
 
-Returns the UUID version, from 1 to 8, or the string `'NilUUID'` or `'MaxUUID'`, and `undefined` if the UUID is not a valid UUID string.
+Returns the UUID version, from 1 to 8, or the string `'NilUUID'` or `'MaxUUID'`, and `undefined` if the UUID is not a valid UUID string. When the optional `versionNumber` parameter is provided, returns a boolean indicating whether the UUID matches the specified version.
 
 **Parameters:**
 - `uuid` (string): The UUID to validate
+- `versionNumber` (number, optional): Specific version number (1-8) to check against
 
 **Returns:**
-- `string`: The UUID version number, ex: `'v7'`
-- `undefined`: If the UUID is not a valid UUID string
+- When called without `versionNumber`:
+  - `string`: The UUID version number, ex: `'v7'`, `'NilUUID'`, `'MaxUUID'`
+  - `undefined`: If the UUID is not a valid UUID string
+- When called with `versionNumber`:
+  - `boolean`: `true` if the UUID matches the specified version, `false` otherwise
+  - `string`: `'NilUUID'` or `'MaxUUID'` for special UUIDs (regardless of versionNumber)
+  - `undefined`: If the UUID is not a valid UUID string
+
+**Examples:**
+```typescript
+// Get version string
+uuidVersionValidation('018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1')  // Returns 'v7'
+
+// Check for specific version
+uuidVersionValidation('018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1', 7)  // Returns true
+uuidVersionValidation('018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1', 4)  // Returns false
+
+// Special UUIDs
+uuidVersionValidation('00000000-0000-0000-0000-000000000000')     // Returns 'NilUUID'
+```
 
 ## About UUIDv7
 

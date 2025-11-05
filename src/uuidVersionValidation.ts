@@ -1,4 +1,5 @@
 import { uuidRegex } from './uuidRegex.js';
+
 type UUIDVersionTuple =
   | 'v1'
   | 'v2'
@@ -10,10 +11,48 @@ type UUIDVersionTuple =
   | 'v8'
   | 'NilUUID'
   | 'MaxUUID'
-  | undefined;
+  | undefined
+  | true
+  | false;
 
-const uuidVersionValidation = (uuid: string): UUIDVersionTuple => {
+type Version = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+type UUID = string;
+
+interface UUIDVersion {
+  versionNumber: Version;
+  uuid: UUID;
+}
+
+const uuidVersionValidation = (
+  uuid: UUIDVersion['uuid'],
+  versionNumber?: UUIDVersion['versionNumber']
+): UUIDVersionTuple => {
   const match: RegExpMatchArray | null = uuidRegex(uuid);
+  const isNilUUID = uuid === '00000000-0000-0000-0000-000000000000';
+  // Max UUID comparison is case-insensitive to handle both upper and lower case formats
+  const isMaxUUID = uuid.toLowerCase() === 'ffffffff-ffff-ffff-ffff-ffffffffffff';
+
+  // When versionNumber is provided, we're in validation mode
+  // Nil and Max UUIDs don't have version fields, so return undefined
+  if (versionNumber !== undefined) {
+    if (isNilUUID || isMaxUUID) {
+      return undefined;
+    }
+  }
+
+  if (isNilUUID) {
+    return 'NilUUID' as UUIDVersionTuple;
+  }
+
+  if (isMaxUUID) {
+    return 'MaxUUID' as UUIDVersionTuple;
+  }
+
+  if (match && versionNumber !== undefined) {
+    // Compare the version extracted from the UUID to the provided versionNumber
+    const version = uuid.charAt(14);
+    return Number(version) === versionNumber;
+  }
 
   if (match) {
     // Extract the version from the UUID (13th character, or index 14 in the string with hyphens)
@@ -22,15 +61,7 @@ const uuidVersionValidation = (uuid: string): UUIDVersionTuple => {
     return `v${version}` as UUIDVersionTuple;
   }
 
-  if (uuid === '00000000-0000-0000-0000-000000000000') {
-    return 'NilUUID' as UUIDVersionTuple;
-  }
-
-  if (uuid.toLowerCase() === 'ffffffff-ffff-ffff-ffff-ffffffffffff') {
-    return 'MaxUUID' as UUIDVersionTuple;
-  }
-
   return undefined;
 };
 
-export { uuidVersionValidation, type UUIDVersionTuple };
+export { uuidVersionValidation, type UUIDVersionTuple, type UUIDVersion };

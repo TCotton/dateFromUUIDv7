@@ -1,6 +1,7 @@
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
 import { uuidVersionValidation } from './index.js';
+import type { UUIDVersion } from './uuidVersionValidation.js';
 
 describe('uuidVersionValidation', () => {
   it('should return v1 for a version 1 UUID', () => {
@@ -144,5 +145,100 @@ describe('uuidVersionValidation', () => {
     for (const inUiud of invalidUuidArray) {
       assert.strictEqual(uuidVersionValidation(inUiud), undefined);
     }
+  });
+
+  // Tests for the new optional versionNumber parameter
+  describe('with versionNumber parameter', () => {
+    it('should return true when UUID matches the specified version number', () => {
+      // Test v1 UUID with versionNumber 1
+      assert.strictEqual(uuidVersionValidation('cc863758-b714-11f0-b576-c586e8619134', 1), true);
+
+      // Test v4 UUID with versionNumber 4
+      assert.strictEqual(uuidVersionValidation('8d5d59a0-b60b-4e2b-9d67-7c5ab53f9e5b', 4), true);
+
+      // Test v7 UUID with versionNumber 7
+      assert.strictEqual(uuidVersionValidation('018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1', 7), true);
+    });
+
+    it('should return false when UUID does not match the specified version number', () => {
+      // Test v1 UUID with versionNumber 4 (should be false)
+      assert.strictEqual(uuidVersionValidation('cc863758-b714-11f0-b576-c586e8619134', 4), false);
+
+      // Test v4 UUID with versionNumber 7 (should be false)
+      assert.strictEqual(uuidVersionValidation('8d5d59a0-b60b-4e2b-9d67-7c5ab53f9e5b', 7), false);
+
+      // Test v7 UUID with versionNumber 1 (should be false)
+      assert.strictEqual(uuidVersionValidation('018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1', 1), false);
+    });
+
+    it('should test all version numbers with their corresponding UUIDs', () => {
+      const testCases = [
+        { uuid: 'cc863758-b714-11f0-b576-c586e8619134', version: 1 }, // v1
+        { uuid: 'e2a1f3c4-1d23-21f2-8f56-abcdef123456', version: 2 }, // v2
+        { uuid: '4384b27d-2698-3cad-8ecd-2b804a6dc803', version: 3 }, // v3
+        { uuid: '8d5d59a0-b60b-4e2b-9d67-7c5ab53f9e5b', version: 4 }, // v4
+        { uuid: 'a4b10451-0bda-5091-84d4-4eccefb8bc64', version: 5 }, // v5
+        { uuid: '1e2f3a4b-5c6d-6f78-90ab-cdef12345678', version: 6 }, // v6
+        { uuid: '018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1', version: 7 }, // v7
+        { uuid: 'd8a1c4e2-12f3-8a4b-91de-5f63bc7a249e', version: 8 }, // v8
+      ];
+
+      for (const { uuid, version } of testCases) {
+        // Should return true for matching version
+        assert.strictEqual(
+          uuidVersionValidation(uuid, version as UUIDVersion['versionNumber']),
+          true,
+          `UUID ${uuid} should match version ${version}`
+        );
+
+        // Should return false for non-matching versions
+        const otherVersions = [1, 2, 3, 4, 5, 6, 7, 8].filter((v) => v !== version);
+        for (const otherVersion of otherVersions) {
+          assert.strictEqual(
+            uuidVersionValidation(uuid, otherVersion as UUIDVersion['versionNumber']),
+            false,
+            `UUID ${uuid} should not match version ${otherVersion}`
+          );
+        }
+      }
+    });
+
+    it('should return undefined for invalid UUIDs even with versionNumber parameter', () => {
+      const invalidUuids = [
+        'invalid-uuid',
+        '018fd8f9-8c00-a4c-8a47-1a6ds4b90f3a1',
+        'not-a-uuid-at-all',
+      ];
+
+      for (const invalidUuid of invalidUuids) {
+        for (const version of [1, 2, 3, 4, 5, 6, 7, 8]) {
+          assert.strictEqual(
+            uuidVersionValidation(invalidUuid, version as UUIDVersion['versionNumber']),
+            undefined,
+            `Invalid UUID ${invalidUuid} should return undefined even with version ${version}`
+          );
+        }
+      }
+    });
+
+    it('should handle special UUIDs (Nil and Max) with versionNumber parameter', () => {
+      const nilUuid = '00000000-0000-0000-0000-000000000000';
+      const maxUuid = 'ffffffff-ffff-ffff-ffff-ffffffffffff';
+
+      // Nil and Max UUIDs don't have version fields to validate against
+      // When in validation mode (versionNumber provided), return undefined
+      for (const version of [1, 2, 3, 4, 5, 6, 7, 8]) {
+        assert.strictEqual(
+          uuidVersionValidation(nilUuid, version as UUIDVersion['versionNumber']),
+          undefined,
+          `Nil UUID with version parameter ${version} should return undefined`
+        );
+        assert.strictEqual(
+          uuidVersionValidation(maxUuid, version as UUIDVersion['versionNumber']),
+          undefined,
+          `Max UUID with version parameter ${version} should return undefined`
+        );
+      }
+    });
   });
 });
