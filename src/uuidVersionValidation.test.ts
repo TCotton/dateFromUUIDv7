@@ -225,18 +225,18 @@ describe('uuidVersionValidation', () => {
       const nilUuid = '00000000-0000-0000-0000-000000000000';
       const maxUuid = 'ffffffff-ffff-ffff-ffff-ffffffffffff';
 
-      // Nil and Max UUIDs don't match the regex pattern (no valid version),
-      // so they fall through to the special case handling and return their special values
+      // Nil and Max UUIDs don't have version fields to validate against
+      // When in validation mode (versionNumber provided), return undefined
       for (const version of [1, 2, 3, 4, 5, 6, 7, 8]) {
         assert.strictEqual(
           uuidVersionValidation(nilUuid, version as UUIDVersion['versionNumber']),
-          'NilUUID',
-          `Nil UUID with version parameter ${version} should return 'NilUUID'`
+          undefined,
+          `Nil UUID with version parameter ${version} should return undefined`
         );
         assert.strictEqual(
           uuidVersionValidation(maxUuid, version as UUIDVersion['versionNumber']),
-          'MaxUUID',
-          `Max UUID with version parameter ${version} should return 'MaxUUID'`
+          undefined,
+          `Max UUID with version parameter ${version} should return undefined`
         );
       }
     });

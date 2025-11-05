@@ -29,6 +29,15 @@ const uuidVersionValidation = (
 ): UUIDVersionTuple => {
   const match: RegExpMatchArray | null = uuidRegex(uuid);
 
+  // When versionNumber is provided, we're in validation mode
+  // Nil and Max UUIDs don't have version fields, so return undefined
+  if (versionNumber !== undefined) {
+    if (uuid === '00000000-0000-0000-0000-000000000000' ||
+        uuid.toLowerCase() === 'ffffffff-ffff-ffff-ffff-ffffffffffff') {
+      return undefined;
+    }
+  }
+
   if (uuid === '00000000-0000-0000-0000-000000000000') {
     return 'NilUUID' as UUIDVersionTuple;
   }
