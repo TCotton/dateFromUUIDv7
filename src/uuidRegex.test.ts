@@ -15,7 +15,7 @@ describe('uuidRegex', () => {
       'd8a1c4e2-12f3-8a4b-91de-5f63bc7a249e',
     ];
     for (const uuid of validUuids) {
-      assert.strictEqual(uuidRegex(uuid), true);
+      assert.notStrictEqual(uuidRegex(uuid), null);
     }
   });
   it('correctly identifies invalid UUIDs', () => {
@@ -27,7 +27,7 @@ describe('uuidRegex', () => {
       'd8a1c4e212f38a4b91de5f63bc7a249e',
     ];
     for (const uuid of invalidUuids) {
-      assert.strictEqual(uuidRegex(uuid), false);
+      assert.strictEqual(uuidRegex(uuid), null);
     }
   });
 });

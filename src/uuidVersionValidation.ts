@@ -13,7 +13,7 @@ type UUIDVersionTuple =
   | undefined;
 
 const uuidVersionValidation = (uuid: string): UUIDVersionTuple => {
-  const match: boolean = uuidRegex(uuid);
+  const match: RegExpMatchArray | null = uuidRegex(uuid);
 
   if (match) {
     // Extract the version from the UUID (13th character, or index 14 in the string with hyphens)
