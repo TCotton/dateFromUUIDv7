@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2025-11-05
+
+### Added
+- **Optional Version Parameter**: Added optional `versionNumber` parameter to `uuidVersionValidation` function for targeted version checking
+- **Boolean Return Mode**: When `versionNumber` parameter is provided, function returns `true`/`false` for version matching instead of version string
+- **Enhanced Type System**: Extended `UUIDVersionTuple` type to include `true | false` for boolean return values
+- **Comprehensive Test Suite**: Added 5 new test cases covering all aspects of the optional parameter functionality
+
+### Changed
+- **Function Signature**: Updated `uuidVersionValidation(uuid: string, versionNumber?: number): UUIDVersionTuple`
+- **Dual Return Behavior**: Function now supports two modes:
+  - Without `versionNumber`: Returns `'v1'` through `'v8'`, `'NilUUID'`, `'MaxUUID'`, or `undefined`
+  - With `versionNumber`: Returns `boolean` for version matching (special UUIDs still return their string values)
+- **Documentation**: Updated README.md with comprehensive examples and API documentation for the new parameter
+
+### Technical Details
+- The optional parameter accepts numbers 1-8 for UUID version checking
+- Boolean mode provides more efficient version validation for conditional logic
+- Nil and Max UUIDs return their special string values even when `versionNumber` is specified
+- All existing functionality remains backward compatible with no breaking changes
+
+### Testing
+- Added nested test suite "with versionNumber parameter" containing 5 comprehensive test cases
+- Test coverage includes positive/negative matches, all version combinations, invalid UUIDs, and special UUID handling
+- Increased total test count from 18 to 23 test cases
+- All tests passing with 100% coverage of new functionality
+
 ## [2.2.1] - 2025-11-04
 
 ### Added

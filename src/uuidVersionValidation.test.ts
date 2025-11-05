@@ -151,10 +151,10 @@ describe('uuidVersionValidation', () => {
     it('should return true when UUID matches the specified version number', () => {
       // Test v1 UUID with versionNumber 1
       assert.strictEqual(uuidVersionValidation('cc863758-b714-11f0-b576-c586e8619134', 1), true);
-      
+
       // Test v4 UUID with versionNumber 4
       assert.strictEqual(uuidVersionValidation('8d5d59a0-b60b-4e2b-9d67-7c5ab53f9e5b', 4), true);
-      
+
       // Test v7 UUID with versionNumber 7
       assert.strictEqual(uuidVersionValidation('018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1', 7), true);
     });
@@ -162,10 +162,10 @@ describe('uuidVersionValidation', () => {
     it('should return false when UUID does not match the specified version number', () => {
       // Test v1 UUID with versionNumber 4 (should be false)
       assert.strictEqual(uuidVersionValidation('cc863758-b714-11f0-b576-c586e8619134', 4), false);
-      
+
       // Test v4 UUID with versionNumber 7 (should be false)
       assert.strictEqual(uuidVersionValidation('8d5d59a0-b60b-4e2b-9d67-7c5ab53f9e5b', 7), false);
-      
+
       // Test v7 UUID with versionNumber 1 (should be false)
       assert.strictEqual(uuidVersionValidation('018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1', 1), false);
     });
@@ -184,14 +184,20 @@ describe('uuidVersionValidation', () => {
 
       for (const { uuid, version } of testCases) {
         // Should return true for matching version
-        assert.strictEqual(uuidVersionValidation(uuid, version as any), true,
-          `UUID ${uuid} should match version ${version}`);
-        
+        assert.strictEqual(
+          uuidVersionValidation(uuid, version),
+          true,
+          `UUID ${uuid} should match version ${version}`
+        );
+
         // Should return false for non-matching versions
-        const otherVersions = [1, 2, 3, 4, 5, 6, 7, 8].filter(v => v !== version);
+        const otherVersions = [1, 2, 3, 4, 5, 6, 7, 8].filter((v) => v !== version);
         for (const otherVersion of otherVersions) {
-          assert.strictEqual(uuidVersionValidation(uuid, otherVersion as any), false,
-            `UUID ${uuid} should not match version ${otherVersion}`);
+          assert.strictEqual(
+            uuidVersionValidation(uuid, otherVersion),
+            false,
+            `UUID ${uuid} should not match version ${otherVersion}`
+          );
         }
       }
     });
@@ -205,8 +211,11 @@ describe('uuidVersionValidation', () => {
 
       for (const invalidUuid of invalidUuids) {
         for (const version of [1, 2, 3, 4, 5, 6, 7, 8]) {
-          assert.strictEqual(uuidVersionValidation(invalidUuid, version), undefined,
-            `Invalid UUID ${invalidUuid} should return undefined even with version ${version}`);
+          assert.strictEqual(
+            uuidVersionValidation(invalidUuid, version),
+            undefined,
+            `Invalid UUID ${invalidUuid} should return undefined even with version ${version}`
+          );
         }
       }
     });
@@ -215,13 +224,19 @@ describe('uuidVersionValidation', () => {
       const nilUuid = '00000000-0000-0000-0000-000000000000';
       const maxUuid = 'ffffffff-ffff-ffff-ffff-ffffffffffff';
 
-      // Nil and Max UUIDs don't match the regex pattern (no valid version), 
+      // Nil and Max UUIDs don't match the regex pattern (no valid version),
       // so they fall through to the special case handling and return their special values
       for (const version of [1, 2, 3, 4, 5, 6, 7, 8]) {
-        assert.strictEqual(uuidVersionValidation(nilUuid, version), 'NilUUID',
-          `Nil UUID with version parameter ${version} should return 'NilUUID'`);
-        assert.strictEqual(uuidVersionValidation(maxUuid, version), 'MaxUUID',
-          `Max UUID with version parameter ${version} should return 'MaxUUID'`);
+        assert.strictEqual(
+          uuidVersionValidation(nilUuid, version),
+          'NilUUID',
+          `Nil UUID with version parameter ${version} should return 'NilUUID'`
+        );
+        assert.strictEqual(
+          uuidVersionValidation(maxUuid, version),
+          'MaxUUID',
+          `Max UUID with version parameter ${version} should return 'MaxUUID'`
+        );
       }
     });
   });
