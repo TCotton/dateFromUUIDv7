@@ -156,6 +156,120 @@ describe('dateFromUUIDv7', () => {
     assert.ok('dateToUTCString' in result);
   });
 
+  it('returns a date object for valid UUIDv7 buffers', () => {
+    // Test Buffer with a known UUIDv7
+    const uuidv7Buffer = Buffer.from([
+      0x01, 0x8f, 0xd8, 0xf9, 0x8c, 0x00, 0x7a, 0x4c, 0x8a, 0x47, 0x1a, 0x6d, 0x4b, 0x90, 0xf3,
+      0xa1,
+    ]);
+    const result = dateFromUUIDv7(uuidv7Buffer);
+
+    assert.ok(result !== undefined);
+    assert.ok(typeof result === 'object');
+    assert.ok('dateToIsoString' in result);
+    assert.ok('dateUnixEpoch' in result);
+    assert.ok('dateToUTCString' in result);
+
+    // Verify the timestamp matches expected value
+    assert.strictEqual(result.dateUnixEpoch, 1717332184064);
+    assert.strictEqual(result.dateToIsoString, '2024-06-02T12:43:04.064Z');
+    assert.strictEqual(result.dateToUTCString, 'Sun, 02 Jun 2024 12:43:04 GMT');
+  });
+
+  it('returns undefined for non-UUIDv7 buffers', () => {
+    // UUIDv4 buffer
+    const v4Buffer = Buffer.from([
+      0x8d, 0x5d, 0x59, 0xa0, 0xb6, 0x0b, 0x4e, 0x2b, 0x9d, 0x67, 0x7c, 0x5a, 0xb5, 0x3f, 0x9e,
+      0x5b,
+    ]);
+    assert.strictEqual(dateFromUUIDv7(v4Buffer), undefined);
+
+    // UUIDv1 buffer
+    const v1Buffer = Buffer.from([
+      0xcc, 0x86, 0x37, 0x58, 0xb7, 0x14, 0x11, 0xf0, 0xb5, 0x76, 0xc5, 0x86, 0xe8, 0x61, 0x91,
+      0x34,
+    ]);
+    assert.strictEqual(dateFromUUIDv7(v1Buffer), undefined);
+  });
+
+  it('returns undefined for malformed buffers', () => {
+    // Short buffer
+    const shortBuffer = Buffer.from([0x01, 0x02, 0x03]);
+    assert.strictEqual(dateFromUUIDv7(shortBuffer), undefined);
+
+    // Empty buffer
+    const emptyBuffer = Buffer.alloc(0);
+    assert.strictEqual(dateFromUUIDv7(emptyBuffer), undefined);
+
+    // Buffer with invalid content that won't form valid UUID
+    const invalidBuffer = Buffer.from([
+      0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+    ]);
+    assert.strictEqual(dateFromUUIDv7(invalidBuffer), undefined);
+  });
+
+  it('should handle string vs buffer equivalence for UUIDv7', () => {
+    const testCases = [
+      {
+        buffer: Buffer.from([
+          0x01, 0x8f, 0xd8, 0xf9, 0x8c, 0x00, 0x7a, 0x4c, 0x8a, 0x47, 0x1a, 0x6d, 0x4b, 0x90, 0xf3,
+          0xa1,
+        ]),
+        string: '018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1',
+        expectedTimestamp: 1717332184064,
+      },
+      {
+        buffer: Buffer.from([
+          0x01, 0x8f, 0xd8, 0xfa, 0x0b, 0x50, 0x7a, 0x6d, 0x8f, 0x25, 0x5b, 0x12, 0xce, 0x7a, 0x90,
+          0x32,
+        ]),
+        string: '018fd8fa-0b50-7a6d-8f25-5b12ce7a9032',
+        expectedTimestamp: 1717332216656,
+      },
+      {
+        buffer: Buffer.from([
+          0x01, 0x8f, 0xd8, 0xfb, 0x11, 0x22, 0x7a, 0x9e, 0x92, 0xd8, 0x0c, 0xfe, 0x13, 0x4a, 0xe4,
+          0x87,
+        ]),
+        string: '018fd8fb-1122-7a9e-92d8-0cfe134ae487',
+        expectedTimestamp: 1717332283682,
+      },
+    ];
+
+    for (const testCase of testCases) {
+      const bufferResult = dateFromUUIDv7(testCase.buffer);
+      const stringResult = dateFromUUIDv7(testCase.string);
+
+      // Both should return valid results
+      assert.ok(bufferResult !== undefined, 'Buffer result should not be undefined');
+      assert.ok(stringResult !== undefined, 'String result should not be undefined');
+
+      // Results should be identical
+      assert.strictEqual(
+        bufferResult.dateUnixEpoch,
+        stringResult.dateUnixEpoch,
+        'Unix epoch should match'
+      );
+      assert.strictEqual(
+        bufferResult.dateToIsoString,
+        stringResult.dateToIsoString,
+        'ISO string should match'
+      );
+      assert.strictEqual(
+        bufferResult.dateToUTCString,
+        stringResult.dateToUTCString,
+        'UTC string should match'
+      );
+
+      // Verify expected timestamp
+      assert.strictEqual(
+        bufferResult.dateUnixEpoch,
+        testCase.expectedTimestamp,
+        'Should match expected timestamp'
+      );
+    }
+  });
+
   it('returns a date object for valid UUIDv7 and correct timestamp extraction', () => {
     const uuidv7 = '018fd8fa-02d5-7c9a-8fb9-45d938b8f091';
     const result = dateFromUUIDv7(uuidv7);

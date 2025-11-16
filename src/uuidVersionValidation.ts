@@ -1,4 +1,6 @@
+import { handleBuffer } from './handleBuffer.js';
 import { uuidRegex } from './uuidRegex.js';
+
 type UUIDVersionTuple =
   | 'v1'
   | 'v2'
@@ -12,15 +14,16 @@ type UUIDVersionTuple =
   | 'MaxUUID'
   | undefined;
 
-const uuidVersionValidation = (uuid: string): UUIDVersionTuple => {
-  const match: RegExpMatchArray | null = uuidRegex(uuid);
-  const isNilUUID = uuid === '00000000-0000-0000-0000-000000000000';
+const uuidVersionValidation = (uuid: string | Buffer): UUIDVersionTuple => {
+  const uuidString = handleBuffer(uuid);
+  const match: RegExpMatchArray | null = uuidRegex(uuidString);
+  const isNilUUID = uuidString === '00000000-0000-0000-0000-000000000000';
   // Max UUID comparison is case-insensitive to handle both upper and lower case formats
-  const isMaxUUID = uuid.toLowerCase() === 'ffffffff-ffff-ffff-ffff-ffffffffffff';
+  const isMaxUUID = uuidString.toLowerCase() === 'ffffffff-ffff-ffff-ffff-ffffffffffff';
 
   if (match) {
     // Extract the version from the UUID (13th character, or index 14 in the string with hyphens)
-    const version = uuid.charAt(14);
+    const version = uuidString.charAt(14);
 
     // Object literal mapping for version characters to version strings
     const versionMap = {

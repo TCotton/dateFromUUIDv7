@@ -1,6 +1,6 @@
 {
   "name": "uuidv7-utilities",
-  "version": "2.2.3",
+  "version": "2.3.0",
   "description": "UUIDv7 utilities for extracting date information from a UUIDv7 string and validating UUID versions.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -29,7 +29,7 @@
     "lint": "biome lint .",
     "lint:fix": "biome lint --write .",
     "check": "biome check --write .",
-    "test": "tsc -p tsconfig.test.json && node --test dist/test/*.test.js",
+    "test": "tsc -p tsconfig.test.json && echo '{\"type\": \"module\"}' > dist/test/package.json && node --test dist/test/*.test.js",
     "prepublishOnly": " npm run check && npm run build"
   },
   "keywords": [
