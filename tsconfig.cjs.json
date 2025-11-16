@@ -4,7 +4,18 @@
     "module": "CommonJS",
     "moduleResolution": "node",
     "outDir": "./dist/cjs",
-    "declaration": false,
+    "declaration": true,
     "declarationMap": false
-  }
+  },
+  "include": [
+    "src/index.cjs.ts",
+    "src/dateFromUUIDv7.ts",
+    "src/uuidVersionValidation.ts",
+    "src/uuidRegex.ts",
+    "src/handleBuffer.ts",
+    "src/isBuffer.ts",
+    "src/stringify.ts",
+    "src/convertBufferToUUIDString.ts"
+  ],
+  "exclude": ["src/**/*.test.ts"]
 }
