@@ -33,6 +33,13 @@ const unsafeStringify = (arr: Uint8Array, offset = 0): string => {
   ).toLowerCase();
 };
 
-export const stringify = (arr: Uint8Array, offset = 0): string => {
+/**
+ * Converts an array of 16 byte values to a UUID string format of the form:
+ * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+ * @param {Uint8Array} arr - The array of bytes to convert.
+ * @param {number} [offset=0] - The starting index in the array.
+ * @returns {string} The UUID string representation.
+ */
+export const stringify = (arr: Uint8Array, offset: number = 0): string => {
   return unsafeStringify(arr, offset);
 };

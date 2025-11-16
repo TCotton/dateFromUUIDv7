@@ -65,7 +65,6 @@ describe('isBuffer', () => {
     const value: unknown = Buffer.from('test');
 
     if (isBuffer(value)) {
-      // Since isBuffer doesn't have proper type guard signature, we need to assert the type
       const buffer = value as Buffer;
       assert.strictEqual(buffer.toString(), 'test');
       assert.strictEqual(typeof buffer.length, 'number');
