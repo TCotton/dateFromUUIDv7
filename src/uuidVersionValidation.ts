@@ -1,5 +1,6 @@
-import { uuidRegex } from './uuidRegex.js';
 import { handleBuffer } from './handleBuffer.js';
+import { uuidRegex } from './uuidRegex.js';
+
 type UUIDVersionTuple =
   | 'v1'
   | 'v2'

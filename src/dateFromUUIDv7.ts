@@ -1,6 +1,6 @@
+import { handleBuffer } from './handleBuffer.js';
 import { uuidRegex } from './uuidRegex.js';
 
-import { handleBuffer } from './handleBuffer.js';
 type DateFromUUIDv7Result =
   | {
       dateToIsoString: string;
