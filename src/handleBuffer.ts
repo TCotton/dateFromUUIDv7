@@ -1,5 +1,5 @@
 import { isBuffer } from './isBuffer.js';
-import { stringify } from './stringify.js';
+import { convertBufferToUUIDString } from './convertBufferToUUIDString.js';
 
 /**
  * Converts a Buffer to a UUID string or passes through a string value unchanged.
@@ -49,7 +49,7 @@ import { stringify } from './stringify.js';
  */
 export const handleBuffer = (value: string | Buffer) => {
   if (isBuffer(value)) {
-    return stringify(value);
+    return convertBufferToUUIDString(value);
   }
   return value;
 };
