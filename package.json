@@ -44,7 +44,8 @@
   "devDependencies": {
     "@biomejs/biome": "^2.3.2",
     "@types/node": "^24.9.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "uuid": "^13.0.0"
   },
   "repository": {
     "type": "git",
@@ -52,5 +53,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "uuidv7": "^1.0.2"
   }
 }
