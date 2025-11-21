@@ -96,7 +96,11 @@ const uuids = [
 const sorted = uuids
     .map(uuid => ({ uuid, int: UUIDv7toUnsignedInteger(uuid) }))
     .filter(item => item.int !== undefined)
-    .sort((a, b) => Number(a.int! - b.int!))
+    .sort((a, b) => {
+        if (a.int! < b.int!) return -1;
+        if (a.int! > b.int!) return 1;
+        return 0;
+    })
     .map(item => item.uuid);
 
 console.log(sorted);  // Sorted by numerical value
@@ -298,7 +302,11 @@ const uuids = ['018fd8f9-8c01-...', '018fd8f9-8c00-...', '018fd8f9-8c02-...'];
 const sorted = uuids
     .map(uuid => ({ uuid, int: UUIDv7toUnsignedInteger(uuid) }))
     .filter(item => item.int !== undefined)
-    .sort((a, b) => Number(a.int! - b.int!))
+    .sort((a, b) => {
+        if (a.int! < b.int!) return -1;
+        if (a.int! > b.int!) return 1;
+        return 0;
+    })
     .map(item => item.uuid);
 
 // Non-UUIDv7 returns undefined

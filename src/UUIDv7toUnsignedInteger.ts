@@ -18,7 +18,7 @@ const UUIDv7toUnsignedInteger = (uuid: string | Buffer): UUIDv7toUnsignedInteger
       const hex = uuidString.replace(/-/g, '');
 
       try {
-        // Convert each hex char → 4-bit binary
+        // Convert hexadecimal string to BigInt
         return BigInt(`0x${hex}`);
       } catch (_error) {
         return undefined;
