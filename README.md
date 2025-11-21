@@ -350,15 +350,19 @@ if (urn) {
 }
 
 // Use in XML documents
-if (urn) {
-    const xmlElement = `<resource id="${urn}">Content</resource>`;
+const uuid2 = '018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1';
+const urn2 = UUIDv7withURNWrapper(uuid2);
+if (urn2) {
+    const xmlElement = `<resource id="${urn2}">Content</resource>`;
     console.log(xmlElement);
 }
 
 // RFC 4122 compliance verification
-if (urn) {
-    console.log(urn.startsWith('urn:uuid:'));  // true
-    console.log(urn.includes(uuid));  // true
+const uuid3 = '018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1';
+const urn3 = UUIDv7withURNWrapper(uuid3);
+if (urn3) {
+    console.log(urn3.startsWith('urn:uuid:'));  // true
+    console.log(urn3.includes(uuid3));  // true
 }
 
 // Non-UUIDv7 returns undefined
