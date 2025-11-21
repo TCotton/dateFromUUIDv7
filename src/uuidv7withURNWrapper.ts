@@ -1,7 +1,7 @@
 import { handleBuffer } from './handleBuffer.js';
 import { uuidRegex } from './uuidRegex.js';
 
-type UUIDv7withURNWrapperType = string | undefined;
+type UUIDv7withURNWrapper = string | undefined;
 
 /**
  * Wraps a valid UUIDv7 string or Buffer in a URN (Uniform Resource Name) as per RFC 4122.
@@ -15,22 +15,22 @@ type UUIDv7withURNWrapperType = string | undefined;
  *
  * @example
  * // Valid UUIDv7 string
- * const urn = UUIDv7withURNWrapper('01890b27-ccf7-7def-b6c2-3b8e6e3c8e5f');
+ * const urn = uuidv7withURNWrapper('01890b27-ccf7-7def-b6c2-3b8e6e3c8e5f');
  * // urn === 'urn:uuid:01890b27-ccf7-7def-b6c2-3b8e6e3c8e5f'
  *
  * @example
  * // Invalid UUID version
- * const urn = UUIDv7withURNWrapper('01890b27-ccf7-4def-b6c2-3b8e6e3c8e5f');
+ * const urn = uuidv7withURNWrapper('01890b27-ccf7-4def-b6c2-3b8e6e3c8e5f');
  * // urn === undefined
  *
  * @example
  * // Buffer input
  * const buf = Buffer.from('01890b27ccf77defb6c23b8e6e3c8e5f', 'hex');
- * const urn = UUIDv7withURNWrapper(buf);
+ * const urn = uuidv7withURNWrapper(buf);
  * // urn === 'urn:uuid:01890b27-ccf7-7def-b6c2-3b8e6e3c8e5f'
  */
 
-const UUIDv7withURNWrapper = (uuid: string | Buffer): UUIDv7withURNWrapperType => {
+const uuidv7withURNWrapper = (uuid: string | Buffer): UUIDv7withURNWrapper => {
   const uuidString = handleBuffer(uuid);
 
   // Validate UUID format using uuidRegex
@@ -49,4 +49,4 @@ const UUIDv7withURNWrapper = (uuid: string | Buffer): UUIDv7withURNWrapperType =
   return undefined;
 };
 
-export { UUIDv7withURNWrapper, type UUIDv7withURNWrapperType };
+export { uuidv7withURNWrapper, type UUIDv7withURNWrapper };

@@ -1,7 +1,7 @@
 import { handleBuffer } from './handleBuffer.js';
 import { uuidRegex } from './uuidRegex.js';
 
-type UUIDVersionTuple =
+type UUIDVersionValidation =
   | 'v1'
   | 'v2'
   | 'v3'
@@ -14,7 +14,7 @@ type UUIDVersionTuple =
   | 'MaxUUID'
   | undefined;
 
-const uuidVersionValidation = (uuid: string | Buffer): UUIDVersionTuple => {
+const uuidVersionValidation = (uuid: string | Buffer): UUIDVersionValidation => {
   const uuidString = handleBuffer(uuid);
   const match: RegExpMatchArray | null = uuidRegex(uuidString);
   const isNilUUID = uuidString === '00000000-0000-0000-0000-000000000000';
@@ -52,4 +52,4 @@ const uuidVersionValidation = (uuid: string | Buffer): UUIDVersionTuple => {
   return undefined;
 };
 
-export { uuidVersionValidation, type UUIDVersionTuple };
+export { uuidVersionValidation, type UUIDVersionValidation };

@@ -5,6 +5,72 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2025-11-21
+
+### Changed - BREAKING CHANGES ⚠️
+
+This release introduces consistent naming conventions across all functions and types. All function names now use lowercase camelCase, and type names use PascalCase without redundant suffixes.
+
+#### Function Name Changes
+- **`UUIDv7toBinary` → `uuidv7toBinary`** - Binary conversion function
+- **`UUIDv7toUnsignedInteger` → `uuidv7toUnsignedInteger`** - BigInt conversion function  
+- **`UUIDv7withURNWrapper` → `uuidv7withURNWrapper`** - URN wrapper function
+- `dateFromUUIDv7` and `uuidVersionValidation` remain unchanged (already lowercase)
+
+#### Type Name Changes
+- **`DateFromUUIDv7Result` → `DateFromUUIDv7`** - Return type for dateFromUUIDv7 function
+- **`UUIDVersionTuple` → `UUIDVersionValidation`** - Return type for uuidVersionValidation function
+- **Removed redundant type exports:**
+  - `UUIDv7toBinaryTuple` (use `UUIDv7toBinary` instead)
+  - `UUIDv7toUnsignedIntegerType` (use `UUIDv7toUnsignedInteger` instead)
+  - `UUIDv7withURNWrapperType` (use `UUIDv7withURNWrapper` instead)
+
+#### File Name Changes
+- `src/UUIDv7toBinary.ts` → `src/uuidv7toBinary.ts`
+- `src/UUIDv7toBinary.test.ts` → `src/uuidv7toBinary.test.ts`
+- `src/UUIDv7toUnsignedInteger.ts` → `src/uuidv7toUnsignedInteger.ts`
+- `src/UUIDv7toUnsignedInteger.test.ts` → `src/uuidv7toUnsignedInteger.test.ts`
+- `src/UUIDv7withURNWrapper.ts` → `src/uuidv7withURNWrapper.ts`
+- `src/UUIDv7withURNWrapper.test.ts` → `src/uuidv7withURNWrapper.test.ts`
+
+### Migration Guide
+
+**Before (v2.x):**
+```typescript
+import { 
+  UUIDv7toBinary, 
+  UUIDv7toUnsignedInteger, 
+  UUIDv7withURNWrapper,
+  DateFromUUIDv7Result,
+  UUIDVersionTuple
+} from 'uuidv7-utilities';
+
+const binary = UUIDv7toBinary(uuid);
+const integer = UUIDv7toUnsignedInteger(uuid);
+const urn = UUIDv7withURNWrapper(uuid);
+```
+
+**After (v3.0.0):**
+```typescript
+import { 
+  uuidv7toBinary, 
+  uuidv7toUnsignedInteger, 
+  uuidv7withURNWrapper,
+  DateFromUUIDv7,
+  UUIDVersionValidation
+} from 'uuidv7-utilities';
+
+const binary = uuidv7toBinary(uuid);
+const integer = uuidv7toUnsignedInteger(uuid);
+const urn = uuidv7withURNWrapper(uuid);
+```
+
+### Documentation
+- Updated README.md with consistent function and type names throughout all examples
+- Updated all code samples to reflect new naming conventions
+- Updated API documentation to use correct function and type names
+- Updated CommonJS examples with new naming
+
 ## [2.6.0] - 2025-11-21
 
 ### Added
