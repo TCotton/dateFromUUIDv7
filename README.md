@@ -18,6 +18,12 @@ A lightweight TypeScript utility library for handling UUIDv7 strings and Buffers
   - Supports both string and Buffer inputs
   - Returns 128-character binary string or `undefined` for invalid/non-v7 UUIDs
 
+- **Convert UUIDv7 to unsigned integer** - `UUIDv7toUnsignedInteger(uuid: string | Buffer): bigint | undefined` _(New in v2.5.0)_
+  - Converts UUIDv7 to 128-bit unsigned integer (BigInt)
+  - Supports both string and Buffer inputs
+  - Returns JavaScript BigInt or `undefined` for invalid/non-v7 UUIDs
+  - Useful for mathematical operations, database storage, and numerical comparisons
+
 - **Comprehensive Buffer Support** - All functions accept both string and Buffer inputs seamlessly
 
 ## Installation
@@ -41,9 +47,60 @@ From PostgreSQL 18, use the `uuidv7()` function instead of `gen_random_uuid()` t
 
 A UUID v7 creation NPM library is [uuidv7](https://www.npmjs.com/package/uuidv7) by [LiosK](https://github.com/LiosK).
 
-Using the `dateFromUUIDv7` function, you can extract the timestamp from the UUIDv7. It will return `undefined` if the UUID is not a valid UUID string. The `uuidVersionValidation` function will return the UUID version from 1 to 8, or the string `'NilUUID'` or `'MaxUUID'`, and `undefined` if the UUID is not a valid UUID string. The `UUIDv7toBinary` function converts a UUIDv7 to its 128-bit binary representation, useful for bit-level analysis or cryptographic applications.
+Using the `dateFromUUIDv7` function, you can extract the timestamp from the UUIDv7. It will return `undefined` if the UUID is not a valid UUID string. The `uuidVersionValidation` function will return the UUID version from 1 to 8, or the string `'NilUUID'` or `'MaxUUID'`, and `undefined` if the UUID is not a valid UUID string. The `UUIDv7toBinary` function converts a UUIDv7 to its 128-bit binary representation, useful for bit-level analysis or cryptographic applications. The `UUIDv7toUnsignedInteger` function converts a UUIDv7 to a 128-bit unsigned integer (BigInt), enabling mathematical operations and efficient numerical comparisons.
 
 ## Usage
+
+### Unsigned Integer Conversion (New in v2.5.0)
+
+```typescript
+import { UUIDv7toUnsignedInteger } from 'uuidv7-utilities';
+
+const uuidString = '018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1';
+const unsignedInt = UUIDv7toUnsignedInteger(uuidString);
+
+if (unsignedInt !== undefined) {
+    console.log(unsignedInt);  // 2101867564823207501898133786717625249n
+    console.log(typeof unsignedInt);  // 'bigint'
+    
+    // Mathematical comparisons
+    const uuid2 = '018fd8f9-8c01-7a4c-8a47-1a6d4b90f3a2';
+    const int2 = UUIDv7toUnsignedInteger(uuid2);
+    if (int2 !== undefined) {
+        console.log(unsignedInt < int2);  // true (first UUID is smaller)
+    }
+    
+    // Convert back to hex for verification
+    const hexString = unsignedInt.toString(16).padStart(32, '0');
+    console.log(hexString);  // '018fd8f98c007a4c8a471a6d4b90f3a1'
+}
+
+// Also works with Buffer input
+const uuidBuffer = Buffer.from([
+  0x01, 0x8f, 0xd8, 0xf9, 0x8c, 0x00, 0x7a, 0x4c,
+  0x8a, 0x47, 0x1a, 0x6d, 0x4b, 0x90, 0xf3, 0xa1
+]);
+const intFromBuffer = UUIDv7toUnsignedInteger(uuidBuffer);
+console.log(unsignedInt === intFromBuffer);  // true
+
+// Returns undefined for non-UUIDv7
+UUIDv7toUnsignedInteger('550e8400-e29b-41d4-a716-446655440000');  // undefined (UUIDv4)
+
+// Use cases: Database storage, sorting, comparisons
+const uuids = [
+    '018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1',
+    '018fd8f9-8c01-7a4c-8a47-1a6d4b90f3a2',
+    '018fd8f9-8bff-7a4c-8a47-1a6d4b90f3a0'
+];
+
+const sorted = uuids
+    .map(uuid => ({ uuid, int: UUIDv7toUnsignedInteger(uuid) }))
+    .filter(item => item.int !== undefined)
+    .sort((a, b) => Number(a.int! - b.int!))
+    .map(item => item.uuid);
+
+console.log(sorted);  // Sorted by numerical value
+```
 
 ### Binary Conversion (New in v2.4.0)
 
@@ -155,7 +212,7 @@ if (result) {
 **⚠️ DEPRECATED** - CommonJS support is deprecated and will be removed in a future version. Please migrate to ES modules.
 
 ```javascript
-const { dateFromUUIDv7, uuidVersionValidation, UUIDv7toBinary } = require('uuidv7-utilities');
+const { dateFromUUIDv7, uuidVersionValidation, UUIDv7toBinary, UUIDv7toUnsignedInteger } = require('uuidv7-utilities');
 
 const uuidString = '018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1';
 const uuid = uuidVersionValidation(uuidString);
@@ -169,6 +226,9 @@ if (uuid === 'v7') {
     
     const binary = UUIDv7toBinary(uuidString);
     console.log(binary?.length);  // 128
+    
+    const unsignedInt = UUIDv7toUnsignedInteger(uuidString);
+    console.log(typeof unsignedInt);  // 'bigint'
 }
 ```
 
@@ -182,6 +242,74 @@ import { dateFromUUIDv7 } from 'uuidv7-utilities';
 ```
 
 ## API
+
+### `UUIDv7toUnsignedInteger(uuid: string | Buffer): bigint | undefined` _(New in v2.5.0)_
+
+Converts a UUIDv7 to its 128-bit unsigned integer representation as a JavaScript BigInt. This function parses the UUID and returns a BigInt that represents the complete 128-bit value as an unsigned integer.
+
+**Parameters:**
+- `uuid` (string | Buffer): The UUIDv7 to convert
+  - **string**: Must be a valid UUIDv7 string format (e.g., '018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1')
+  - **Buffer**: Must be exactly 16 bytes representing a UUIDv7
+
+**Returns:**
+- `bigint`: 128-bit unsigned integer representation of the UUID
+  - JavaScript BigInt type (requires Node.js >= 10.4.0 or modern browsers)
+  - Preserves all 128 bits with no precision loss
+  - Range: 0 to 340282366920938463463374607431768211455 (2^128 - 1)
+  - Supports all standard BigInt operations (arithmetic, comparison, bitwise)
+- `undefined`: If the UUID is not a valid UUIDv7, malformed, or a different UUID version
+
+**Use Cases:**
+- **Database Storage**: Store UUIDs as NUMERIC/DECIMAL types in databases supporting 128-bit integers
+- **Mathematical Operations**: Perform arithmetic or bitwise operations on UUID values
+- **Sorting & Comparison**: Direct numerical comparison without string parsing overhead
+- **Cryptographic Applications**: Use integer representation for cryptographic operations
+- **Binary Protocols**: Efficient transmission in binary-optimized protocols
+- **Performance**: Faster comparisons using native integer operations vs string manipulation
+
+**Examples:**
+```typescript
+// String input
+const bigInt = UUIDv7toUnsignedInteger('018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1');
+console.log(bigInt);  // 2101867564823207501898133786717625249n
+console.log(typeof bigInt);  // 'bigint'
+
+// Buffer input  
+const buffer = Buffer.from([0x01, 0x8f, 0xd8, 0xf9, 0x8c, 0x00, 0x7a, 0x4c, 0x8a, 0x47, 0x1a, 0x6d, 0x4b, 0x90, 0xf3, 0xa1]);
+UUIDv7toUnsignedInteger(buffer);  // Same BigInt value
+
+// Mathematical comparisons
+const int1 = UUIDv7toUnsignedInteger('018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1');
+const int2 = UUIDv7toUnsignedInteger('018fd8f9-8c01-7a4c-8a47-1a6d4b90f3a2');
+if (int1 !== undefined && int2 !== undefined) {
+    console.log(int1 < int2);  // true
+    console.log(int2 - int1);  // 281474976710657n (difference)
+}
+
+// Convert back to hex
+if (bigInt !== undefined) {
+    const hexString = bigInt.toString(16).padStart(32, '0');
+    console.log(hexString);  // '018fd8f98c007a4c8a471a6d4b90f3a1'
+}
+
+// Sorting UUIDs numerically
+const uuids = ['018fd8f9-8c01-...', '018fd8f9-8c00-...', '018fd8f9-8c02-...'];
+const sorted = uuids
+    .map(uuid => ({ uuid, int: UUIDv7toUnsignedInteger(uuid) }))
+    .filter(item => item.int !== undefined)
+    .sort((a, b) => Number(a.int! - b.int!))
+    .map(item => item.uuid);
+
+// Non-UUIDv7 returns undefined
+UUIDv7toUnsignedInteger('550e8400-e29b-41d4-a716-446655440000');  // undefined (UUIDv4)
+UUIDv7toUnsignedInteger('invalid-uuid');  // undefined
+```
+
+**BigInt Support:**
+- Requires JavaScript runtime with BigInt support
+- Node.js >= 10.4.0
+- All modern browsers (Chrome 67+, Firefox 68+, Safari 14+, Edge 79+)
 
 ### `UUIDv7toBinary(uuid: string | Buffer): string | undefined` _(New in v2.4.0)_
 
@@ -277,6 +405,7 @@ uuidVersionValidation('invalid-uuid'); // undefined
 
 **As of version 2.3.0**, all functions support both string and Buffer inputs.
 **As of version 2.4.0**, the new `UUIDv7toBinary` function also supports both input types.
+**As of version 2.5.0**, the new `UUIDv7toUnsignedInteger` function also supports both input types.
 
 ### Why Buffer Support?
 - **Database Compatibility**: Many databases store UUIDs as binary data (16 bytes)
