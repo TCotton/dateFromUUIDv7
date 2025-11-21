@@ -5,6 +5,67 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.0] - 2025-11-21
+
+### Added
+- **UUIDv7toUnsignedInteger Function**: New utility function for converting UUIDv7 to unsigned integer representation
+  - `UUIDv7toUnsignedInteger(uuid: string | Buffer): bigint | undefined` - Converts UUIDv7 to 128-bit unsigned integer
+  - Supports both string and Buffer inputs for consistency with existing functions
+  - Returns a JavaScript `BigInt` representing the complete UUID as an unsigned 128-bit integer
+  - Returns `undefined` for invalid UUIDs or non-UUIDv7 versions
+  - Includes comprehensive JSDoc documentation and TypeScript type definitions
+- **UUIDv7toUnsignedIntegerType**: New TypeScript type export for the unsigned integer conversion return type
+- **Comprehensive Unsigned Integer Test Coverage**: Added 40 new test cases specifically for UUIDv7toUnsignedInteger
+  - BigInt conversion accuracy tests
+  - Precision verification for all 128 bits
+  - Edge cases including nil/max UUIDs, malformed inputs
+  - String vs Buffer equivalence validation
+  - All UUID version rejection tests (v1-v6, v8)
+  - Comparison operations between BigInt results
+
+### Technical Implementation
+- **BigInt Conversion Algorithm**: Efficient hex-to-BigInt conversion
+  - Strips UUID hyphens before conversion
+  - Converts hexadecimal string to unsigned 128-bit integer using `BigInt('0x' + hex)`
+  - Preserves all 128 bits of UUID information with no precision loss
+  - Includes try-catch error handling for robustness
+- **Version Validation**: Extracts and validates UUID version before conversion
+  - Only processes UUIDs with version 7 (character at position 14 in hyphenated format)
+  - Reuses existing `uuidRegex` and `handleBuffer` utilities for consistent validation
+- **Buffer Support**: Seamless handling of both string and Buffer inputs through `handleBuffer` utility
+
+### Testing
+- **Expanded Test Suite**: Increased from 134 to 169 total tests (35 new tests)
+- **Unsigned Integer Conversion Coverage**: 40 comprehensive test cases including:
+  - Valid UUIDv7 string and Buffer conversions to BigInt
+  - Correct unsigned integer representation validation
+  - Precision maintenance for all 128 bits (no data loss)
+  - BigInt comparison operations (less than, greater than, equality)
+  - Very large UUID values (testing BigInt capability)
+  - Real-world UUIDv7 examples
+  - Invalid input handling (wrong versions, malformed UUIDs, special characters)
+  - Consistency and idempotency tests
+  - Round-trip conversion verification (BigInt back to hex preserves all data)
+- **All Tests Passing**: 169/169 tests passing with no failures
+
+### Use Cases
+- **Database Storage**: Store UUIDs as unsigned integers in databases that support 128-bit integer types
+- **Cryptographic Applications**: Use integer representation for mathematical operations on UUIDs
+- **Sorting and Comparison**: Direct numerical comparison of UUIDs without string parsing
+- **Binary Protocols**: Efficient transmission of UUIDs in binary format
+- **Performance Optimization**: Faster comparison and manipulation using native integer operations
+- **Mathematical Operations**: Perform arithmetic or bitwise operations on UUID values
+
+### Documentation
+- **Type Exports**: Proper TypeScript type exports for `UUIDv7toUnsignedIntegerType`
+- **Full API Documentation**: Complete JSDoc comments explaining parameters, returns, and use cases
+
+### Migration Notes
+- **Fully Backward Compatible**: No changes required for existing functionality
+- **New Capabilities**: UUIDs can now be converted to unsigned integers for mathematical operations
+- **Type Safety**: TypeScript users benefit from enhanced type checking for BigInt conversions
+- **JavaScript BigInt Support**: Requires JavaScript runtime with BigInt support (Node.js >= 10.4.0, modern browsers)
+
 ## [2.4.0] - 2025-11-21
 
 ### Added
