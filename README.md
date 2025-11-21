@@ -24,6 +24,13 @@ A lightweight TypeScript utility library for handling UUIDv7 strings and Buffers
   - Returns JavaScript BigInt or `undefined` for invalid/non-v7 UUIDs
   - Useful for mathematical operations, database storage, and numerical comparisons
 
+- **Wrap UUIDv7 with URN prefix** - `UUIDv7withURNWrapper(uuid: string | Buffer): string | undefined` _(New in v2.6.0)_
+  - Wraps UUIDv7 with RFC 4122 compliant `urn:uuid:` prefix
+  - Supports both string and Buffer inputs
+  - Returns URN-formatted string (e.g., `urn:uuid:018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1`) or `undefined` for invalid/non-v7 UUIDs
+  - Preserves original UUID case (uppercase, lowercase, or mixed)
+  - Useful for semantic web, XML documents, and standards-compliant UUID references
+
 - **Comprehensive Buffer Support** - All functions accept both string and Buffer inputs seamlessly
 
 ## Installation
@@ -47,9 +54,52 @@ From PostgreSQL 18, use the `uuidv7()` function instead of `gen_random_uuid()` t
 
 A UUID v7 creation NPM library is [uuidv7](https://www.npmjs.com/package/uuidv7) by [LiosK](https://github.com/LiosK).
 
-Using the `dateFromUUIDv7` function, you can extract the timestamp from the UUIDv7. It will return `undefined` if the UUID is not a valid UUID string. The `uuidVersionValidation` function will return the UUID version from 1 to 8, or the string `'NilUUID'` or `'MaxUUID'`, and `undefined` if the UUID is not a valid UUID string. The `UUIDv7toBinary` function converts a UUIDv7 to its 128-bit binary representation, useful for bit-level analysis or cryptographic applications. The `UUIDv7toUnsignedInteger` function converts a UUIDv7 to a 128-bit unsigned integer (BigInt), enabling mathematical operations and efficient numerical comparisons.
+Using the `dateFromUUIDv7` function, you can extract the timestamp from the UUIDv7. It will return `undefined` if the UUID is not a valid UUID string. The `uuidVersionValidation` function will return the UUID version from 1 to 8, or the string `'NilUUID'` or `'MaxUUID'`, and `undefined` if the UUID is not a valid UUID string. The `UUIDv7toBinary` function converts a UUIDv7 to its 128-bit binary representation, useful for bit-level analysis or cryptographic applications. The `UUIDv7toUnsignedInteger` function converts a UUIDv7 to a 128-bit unsigned integer (BigInt), enabling mathematical operations and efficient numerical comparisons. The `UUIDv7withURNWrapper` function wraps a UUIDv7 with the RFC 4122 compliant `urn:uuid:` prefix, useful for semantic web applications and standards-compliant UUID references.
 
 ## Usage
+
+### URN Wrapper (New in v2.6.0)
+
+```typescript
+import { UUIDv7withURNWrapper } from 'uuidv7-utilities';
+
+const uuidString = '018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1';
+const urnWrapped = UUIDv7withURNWrapper(uuidString);
+
+if (urnWrapped) {
+    console.log(urnWrapped);  // 'urn:uuid:018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1'
+    
+    // Use in semantic web applications
+    const rdfTriple = `<${urnWrapped}> <http://xmlns.com/foaf/0.1/name> "Example Resource" .`;
+    console.log(rdfTriple);
+    
+    // Use in XML documents
+    const xmlReference = `<resource id="${urnWrapped}">...</resource>`;
+    console.log(xmlReference);
+}
+
+// Also works with Buffer input
+const uuidBuffer = Buffer.from([
+  0x01, 0x8f, 0xd8, 0xf9, 0x8c, 0x00, 0x7a, 0x4c,
+  0x8a, 0x47, 0x1a, 0x6d, 0x4b, 0x90, 0xf3, 0xa1
+]);
+const urnFromBuffer = UUIDv7withURNWrapper(uuidBuffer);
+console.log(urnWrapped === urnFromBuffer);  // true
+
+// Preserves original case
+const upperUuid = '018FD8F9-8C00-7A4C-8A47-1A6D4B90F3A1';
+console.log(UUIDv7withURNWrapper(upperUuid));  // 'urn:uuid:018FD8F9-8C00-7A4C-8A47-1A6D4B90F3A1'
+
+// Returns undefined for non-UUIDv7
+UUIDv7withURNWrapper('550e8400-e29b-41d4-a716-446655440000');  // undefined (UUIDv4)
+
+// Use cases: Standards-compliant identifiers
+const permanentIdentifier = UUIDv7withURNWrapper('018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1');
+if (permanentIdentifier) {
+    // RFC 4122 compliant URN format
+    console.log(permanentIdentifier.startsWith('urn:uuid:'));  // true
+}
+```
 
 ### Unsigned Integer Conversion (New in v2.5.0)
 
@@ -216,7 +266,7 @@ if (result) {
 **⚠️ DEPRECATED** - CommonJS support is deprecated and will be removed in a future version. Please migrate to ES modules.
 
 ```javascript
-const { dateFromUUIDv7, uuidVersionValidation, UUIDv7toBinary, UUIDv7toUnsignedInteger } = require('uuidv7-utilities');
+const { dateFromUUIDv7, uuidVersionValidation, UUIDv7toBinary, UUIDv7toUnsignedInteger, UUIDv7withURNWrapper } = require('uuidv7-utilities');
 
 const uuidString = '018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1';
 const uuid = uuidVersionValidation(uuidString);
@@ -233,6 +283,9 @@ if (uuid === 'v7') {
     
     const unsignedInt = UUIDv7toUnsignedInteger(uuidString);
     console.log(typeof unsignedInt);  // 'bigint'
+    
+    const urnWrapped = UUIDv7withURNWrapper(uuidString);
+    console.log(urnWrapped);  // 'urn:uuid:018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1'
 }
 ```
 
@@ -246,6 +299,79 @@ import { dateFromUUIDv7 } from 'uuidv7-utilities';
 ```
 
 ## API
+
+### `UUIDv7withURNWrapper(uuid: string | Buffer): string | undefined` _(New in v2.6.0)_
+
+Wraps a UUIDv7 with the RFC 4122 compliant URN prefix `urn:uuid:`. This function validates the UUID and, if it's a valid UUIDv7, returns it in URN format for use in standards-compliant applications.
+
+**Parameters:**
+- `uuid` (string | Buffer): The UUIDv7 to wrap
+  - **string**: Must be a valid UUIDv7 string format (e.g., '018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1')
+  - **Buffer**: Must be exactly 16 bytes representing a UUIDv7
+
+**Returns:**
+- `string`: URN-formatted UUID string (e.g., 'urn:uuid:018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1')
+  - Always starts with `urn:uuid:` prefix per RFC 4122
+  - Preserves the original UUID case exactly (no normalization)
+  - Includes the complete UUID with standard hyphenation
+- `undefined`: If the UUID is not a valid UUIDv7, malformed, or a different UUID version
+
+**Use Cases:**
+- **Semantic Web & Linked Data**: Generate URN identifiers for RDF, OWL, and semantic web applications
+- **XML Documents**: Proper URN format for UUID references in XML schemas and documents per RFC 4122
+- **Standards Compliance**: Generate RFC 4122 compliant URN representations of UUIDs
+- **Persistent Identifiers**: Create permanent, location-independent identifiers using the URN scheme
+- **Interoperability**: Exchange UUIDs in standardized URN format across different systems
+- **Database & API Integration**: Format UUIDs as URNs for systems requiring URN-style identifiers
+- **Document Linking**: Reference resources using URN-formatted UUIDs in documentation and metadata
+
+**Examples:**
+```typescript
+// String input
+const urn = UUIDv7withURNWrapper('018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1');
+console.log(urn);  // 'urn:uuid:018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1'
+
+// Buffer input  
+const buffer = Buffer.from([0x01, 0x8f, 0xd8, 0xf9, 0x8c, 0x00, 0x7a, 0x4c, 0x8a, 0x47, 0x1a, 0x6d, 0x4b, 0x90, 0xf3, 0xa1]);
+UUIDv7withURNWrapper(buffer);  // Same URN string
+
+// Case preservation
+const lowerUuid = '018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1';
+const upperUuid = '018FD8F9-8C00-7A4C-8A47-1A6D4B90F3A1';
+console.log(UUIDv7withURNWrapper(lowerUuid));  // 'urn:uuid:018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1'
+console.log(UUIDv7withURNWrapper(upperUuid));  // 'urn:uuid:018FD8F9-8C00-7A4C-8A47-1A6D4B90F3A1'
+
+// Use in RDF/semantic web
+const uuid = '018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1';
+const urn = UUIDv7withURNWrapper(uuid);
+if (urn) {
+    const rdfTriple = `<${urn}> <http://xmlns.com/foaf/0.1/name> "Resource Name" .`;
+    console.log(rdfTriple);
+}
+
+// Use in XML documents
+if (urn) {
+    const xmlElement = `<resource id="${urn}">Content</resource>`;
+    console.log(xmlElement);
+}
+
+// RFC 4122 compliance verification
+if (urn) {
+    console.log(urn.startsWith('urn:uuid:'));  // true
+    console.log(urn.includes(uuid));  // true
+}
+
+// Non-UUIDv7 returns undefined
+UUIDv7withURNWrapper('550e8400-e29b-41d4-a716-446655440000');  // undefined (UUIDv4)
+UUIDv7withURNWrapper('00000000-0000-0000-0000-000000000000');  // undefined (Nil UUID)
+UUIDv7withURNWrapper('invalid-uuid');  // undefined
+```
+
+**RFC 4122 Compliance:**
+- Follows RFC 4122 Section 3 specification for UUID URN namespace
+- URN format: `urn:uuid:{UUID}` where UUID is in standard 8-4-4-4-12 format
+- Only wraps valid UUIDv7 (version 7) UUIDs
+- Preserves UUID case to maintain data fidelity
 
 ### `UUIDv7toUnsignedInteger(uuid: string | Buffer): bigint | undefined` _(New in v2.5.0)_
 
@@ -414,6 +540,7 @@ uuidVersionValidation('invalid-uuid'); // undefined
 **As of version 2.3.0**, all functions support both string and Buffer inputs.
 **As of version 2.4.0**, the new `UUIDv7toBinary` function also supports both input types.
 **As of version 2.5.0**, the new `UUIDv7toUnsignedInteger` function also supports both input types.
+**As of version 2.6.0**, the new `UUIDv7withURNWrapper` function also supports both input types.
 
 ### Why Buffer Support?
 - **Database Compatibility**: Many databases store UUIDs as binary data (16 bytes)

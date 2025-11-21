@@ -5,6 +5,80 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.0] - 2025-11-21
+
+### Added
+- **UUIDv7withURNWrapper Function**: New utility function for wrapping UUIDv7 with RFC 4122 URN prefix
+  - `UUIDv7withURNWrapper(uuid: string | Buffer): string | undefined` - Wraps UUIDv7 with `urn:uuid:` prefix
+  - Supports both string and Buffer inputs for consistency with existing functions
+  - Returns a string in RFC 4122 URN format: `urn:uuid:{uuid}` (e.g., `urn:uuid:018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1`)
+  - Returns `undefined` for invalid UUIDs or non-UUIDv7 versions
+  - Preserves original UUID case (uppercase, lowercase, or mixed) in the wrapped output
+  - Includes comprehensive JSDoc documentation and TypeScript type definitions
+- **UUIDv7withURNWrapperType**: New TypeScript type export for the URN wrapper return type
+- **Comprehensive URN Wrapper Test Coverage**: Added 33 new test cases specifically for UUIDv7withURNWrapper
+  - RFC 4122 URN format compliance validation
+  - String vs Buffer input equivalence tests
+  - Case preservation verification (uppercase, lowercase, mixed case)
+  - Edge cases including maximum/minimum timestamps, all numeric/alphabetic hex characters
+  - All UUID version rejection tests (v1-v6, v8)
+  - Special UUID handling (Nil and Max UUIDs)
+  - Malformed input validation (wrong length, missing hyphens, invalid characters)
+  - Buffer edge cases (incorrect lengths, extra bytes)
+  - Consistency and idempotency tests
+
+### Technical Implementation
+- **URN Wrapping Algorithm**: RFC 4122 compliant URN formatting
+  - Validates UUID format using existing `uuidRegex` utility
+  - Extracts version byte from UUID (position 14 in hyphenated format)
+  - Only wraps UUIDs with version 7
+  - Prepends `urn:uuid:` prefix to valid UUIDv7 strings
+  - Preserves original UUID string exactly (no normalization or case conversion)
+- **Version Validation**: Strict UUIDv7-only processing
+  - Rejects all other UUID versions (v1-v6, v8)
+  - Rejects special UUIDs (Nil UUID: all zeros, Max UUID: all ones)
+  - Returns `undefined` for any non-v7 UUID
+- **Buffer Support**: Seamless handling of both string and Buffer inputs through `handleBuffer` utility
+  - 16-byte buffers converted to UUID string format before wrapping
+  - Maintains consistency with other library functions
+
+### Testing
+- **Expanded Test Suite**: Increased from 169 to 201 total tests (32 new tests)
+- **URN Wrapper Coverage**: 33 comprehensive test cases including:
+  - Valid UUIDv7 wrapping for both string and Buffer inputs
+  - RFC 4122 format compliance (`urn:uuid:` prefix validation)
+  - Case preservation (uppercase, lowercase, mixed case UUIDs)
+  - Real-world UUIDv7 examples
+  - Maximum and minimum timestamp UUIDs
+  - All UUID version rejection (v1, v2, v3, v4, v5, v6, v8)
+  - Malformed UUID handling (wrong length, missing hyphens, incorrect hyphen positions)
+  - Invalid character detection (special characters, spaces, random strings)
+  - Empty string and nil/max UUID rejection
+  - Buffer edge cases (too short, extra bytes handled by using first 16)
+  - String-buffer equivalence validation
+  - Multiple call consistency verification
+- **All Tests Passing**: 201/201 tests passing with no failures
+
+### Use Cases
+- **Semantic Web & Linked Data**: Generate URN identifiers for RDF, OWL, and semantic web applications
+- **XML Documents**: Proper URN format for UUID references in XML schemas and documents per RFC 4122
+- **Standards Compliance**: Generate RFC 4122 compliant URN representations of UUIDs
+- **Persistent Identifiers**: Create permanent, location-independent identifiers using URN scheme
+- **Interoperability**: Exchange UUIDs in standardized URN format across different systems
+- **Database & API Integration**: Format UUIDs as URNs for systems requiring URN-style identifiers
+- **Document Linking**: Reference resources using URN-formatted UUIDs in documentation and metadata
+
+### Documentation
+- **Type Exports**: Proper TypeScript type exports for `UUIDv7withURNWrapperType`
+- **RFC 4122 Compliance**: URN format follows RFC 4122 Section 3 specification
+- **Full API Documentation**: Complete JSDoc comments explaining parameters, returns, and use cases
+
+### Migration Notes
+- **Fully Backward Compatible**: No changes required for existing functionality
+- **New Capabilities**: UUIDs can now be wrapped in RFC 4122 compliant URN format
+- **Type Safety**: TypeScript users benefit from enhanced type checking for URN-wrapped UUIDs
+- **Case Preservation**: Original UUID case is maintained in output (no automatic lowercasing)
+
 ## [2.5.0] - 2025-11-21
 
 ### Added
