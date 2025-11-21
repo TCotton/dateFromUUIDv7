@@ -9,7 +9,7 @@ type DateFromUUIDv7 =
     }
   | undefined;
 
-const dateFromUUIDv7 = (uuid: string | Buffer): DateFromUUIDv7 => {
+const dateFromUUIDv7 = (uuid: string | Buffer<ArrayBufferLike>): DateFromUUIDv7 => {
   const uuidString = handleBuffer(uuid);
   // Validate UUID format using uuidRegex
   const match: RegExpMatchArray | null = uuidRegex(uuidString);

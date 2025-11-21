@@ -47,7 +47,7 @@ import { convertBufferToUUIDString } from './convertBufferToUUIDString.js';
  * const shortBuffer = Buffer.from([0x01, 0x02, 0x03]);
  * handleBuffer(shortBuffer); // Returns malformed string like "010203undefined-undefined-..."
  */
-export const handleBuffer = (value: string | Buffer): string => {
+export const handleBuffer = (value: string | Buffer<ArrayBufferLike>): string => {
   if (isBuffer(value)) {
     return convertBufferToUUIDString(value);
   }

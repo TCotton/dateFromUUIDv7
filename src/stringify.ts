@@ -4,11 +4,9 @@
  */
 const byteToHex: string[] = [];
 
-for (let i = 0; i < 256; ++i) {
-  byteToHex.push((i + 0x100).toString(16).slice(1));
-}
+for (let i = 0; i < 256; ++i) byteToHex.push((i + 0x100).toString(16).slice(1));
 
-const unsafeStringify = (arr: Uint8Array, offset = 0): string => {
+const unsafeStringify = (arr: Uint8Array<ArrayBufferLike>, offset = 0): string => {
   return (
     byteToHex[arr[offset]] +
     byteToHex[arr[offset + 1]] +
@@ -40,6 +38,6 @@ const unsafeStringify = (arr: Uint8Array, offset = 0): string => {
  * @param {number} [offset=0] - The starting index in the array.
  * @returns {string} The UUID string representation.
  */
-export const stringify = (arr: Uint8Array, offset: number = 0): string => {
+export const stringify = (arr: Uint8Array<ArrayBufferLike>, offset: number = 0): string => {
   return unsafeStringify(arr, offset);
 };

@@ -14,7 +14,7 @@ type UUIDVersionValidation =
   | 'MaxUUID'
   | undefined;
 
-const uuidVersionValidation = (uuid: string | Buffer): UUIDVersionValidation => {
+const uuidVersionValidation = (uuid: string | Buffer<ArrayBufferLike>): UUIDVersionValidation => {
   const uuidString = handleBuffer(uuid);
   const match: RegExpMatchArray | null = uuidRegex(uuidString);
   const isNilUUID = uuidString === '00000000-0000-0000-0000-000000000000';

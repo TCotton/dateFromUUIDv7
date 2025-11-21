@@ -4,4 +4,5 @@
  * @param {unknown} value - The value to check.
  * @returns {value is Buffer} True if the value is a Buffer, false otherwise.
  */
-export const isBuffer = (value: unknown): value is Buffer => Buffer.isBuffer(value);
+export const isBuffer = (value: unknown): value is Buffer<ArrayBufferLike> =>
+  Buffer.isBuffer(value);

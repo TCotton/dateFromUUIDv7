@@ -21,7 +21,7 @@ import { stringify } from './stringify.js';
  * - Buffers must be exactly 16 bytes for valid UUID conversion
  * - Invalid or malformed Buffers will produce non-standard UUID strings containing 'undefined' or 'nan'
  */
-const convertBufferToUUIDString = (originalBuf: Buffer): string => {
+const convertBufferToUUIDString = (originalBuf: Buffer<ArrayBufferLike>): string => {
   return stringify(originalBuf);
 };
 

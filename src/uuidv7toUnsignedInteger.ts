@@ -22,7 +22,9 @@ type UUIDv7toUnsignedInteger = bigint | undefined;
  * uuidv7toUnsignedInteger('not-a-uuid');
  */
 
-const uuidv7toUnsignedInteger = (uuid: string | Buffer): UUIDv7toUnsignedInteger => {
+const uuidv7toUnsignedInteger = (
+  uuid: string | Buffer<ArrayBufferLike>
+): UUIDv7toUnsignedInteger => {
   const uuidString = handleBuffer(uuid);
 
   // Validate UUID format using uuidRegex

@@ -30,7 +30,7 @@ type UUIDv7withURNWrapper = string | undefined;
  * // urn === 'urn:uuid:01890b27-ccf7-7def-b6c2-3b8e6e3c8e5f'
  */
 
-const uuidv7withURNWrapper = (uuid: string | Buffer): UUIDv7withURNWrapper => {
+const uuidv7withURNWrapper = (uuid: string | Buffer<ArrayBufferLike>): UUIDv7withURNWrapper => {
   const uuidString = handleBuffer(uuid);
 
   // Validate UUID format using uuidRegex

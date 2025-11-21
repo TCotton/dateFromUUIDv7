@@ -22,7 +22,7 @@ type UUIDv7toBinary = string | undefined;
  * uuidv7toBinary('not-a-uuid');
  */
 
-const uuidv7toBinary = (uuid: string | Buffer): UUIDv7toBinary => {
+const uuidv7toBinary = (uuid: string | Buffer<ArrayBufferLike>): UUIDv7toBinary => {
   const uuidString = handleBuffer(uuid);
 
   // Validate UUID format using uuidRegex
