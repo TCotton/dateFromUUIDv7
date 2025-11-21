@@ -1,18 +1,18 @@
-import { DateFromUUIDv7Result, dateFromUUIDv7 } from './dateFromUUIDv7.js';
-import { UUIDVersionTuple, uuidVersionValidation } from './uuidVersionValidation.js';
-import { UUIDv7toBinary, UUIDv7toBinaryTuple } from './UUIDv7toBinary.js';
-import { UUIDv7toUnsignedIntegerType, UUIDv7toUnsignedInteger } from './UUIDv7toUnsignedInteger.js';
-import { UUIDv7withURNWrapper, UUIDv7withURNWrapperType } from './UUIDv7withURNWrapper.js';
+import { DateFromUUIDv7, dateFromUUIDv7 } from './dateFromUUIDv7.js';
+import { UUIDVersionValidation, uuidVersionValidation } from './uuidVersionValidation.js';
+import { UUIDv7toBinary, uuidv7toBinary } from './uuidv7toBinary.js';
+import { UUIDv7toUnsignedInteger, uuidv7toUnsignedInteger } from './uuidv7toUnsignedInteger.js';
+import { UUIDv7withURNWrapper, uuidv7withURNWrapper } from './uuidv7withURNWrapper.js';
 
 export {
   dateFromUUIDv7,
-  DateFromUUIDv7Result,
+  DateFromUUIDv7,
   uuidVersionValidation,
-  UUIDVersionTuple,
+  UUIDVersionValidation,
+  uuidv7toBinary,
   UUIDv7toBinary,
-  UUIDv7toBinaryTuple,
+  uuidv7toUnsignedInteger,
   UUIDv7toUnsignedInteger,
-  UUIDv7toUnsignedIntegerType,
+  uuidv7withURNWrapper,
   UUIDv7withURNWrapper,
-  UUIDv7withURNWrapperType,
 };

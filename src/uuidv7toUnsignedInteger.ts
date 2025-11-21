@@ -1,28 +1,28 @@
 import { handleBuffer } from './handleBuffer.js';
 import { uuidRegex } from './uuidRegex.js';
 
-type UUIDv7toBinaryTuple = string | undefined;
+type UUIDv7toUnsignedInteger = bigint | undefined;
 
 /**
- * Converts a UUIDv7 string or Buffer to its binary (bit string) representation.
+ * Converts a UUIDv7 string or Buffer to its unsigned integer representation.
  *
  * Validates the input as a UUID, checks that it is version 7, and then
- * returns a string of 128 bits representing the UUID. If the input is not a valid
+ * returns a BigInt representing the complete 128-bit UUID value. If the input is not a valid
  * UUIDv7, returns `undefined`.
  *
  * @param {string | Buffer} uuid - The UUIDv7 as a string or Buffer.
- * @returns {string | undefined} The 128-bit binary string representation of the UUIDv7, or `undefined` if invalid.
+ * @returns {bigint | undefined} The 128-bit unsigned integer representation of the UUIDv7, or `undefined` if invalid.
  *
  * @example
- * // Returns a 128-character binary string
- * UUIDv7toBinary('0187f21c-5b8c-7cc2-9c0a-8c5e4e5e4e5e');
+ * // Returns a BigInt
+ * uuidv7toUnsignedInteger('018fd8f9-8c00-7a4c-8a47-1a6d4b90f3a1');
  *
  * @example
  * // Returns undefined for invalid UUID
- * UUIDv7toBinary('not-a-uuid');
+ * uuidv7toUnsignedInteger('not-a-uuid');
  */
 
-const UUIDv7toBinary = (uuid: string | Buffer): UUIDv7toBinaryTuple => {
+const uuidv7toUnsignedInteger = (uuid: string | Buffer): UUIDv7toUnsignedInteger => {
   const uuidString = handleBuffer(uuid);
 
   // Validate UUID format using uuidRegex
@@ -37,11 +37,8 @@ const UUIDv7toBinary = (uuid: string | Buffer): UUIDv7toBinaryTuple => {
       const hex = uuidString.replace(/-/g, '');
 
       try {
-        // Convert each hex char → 4-bit binary
-        return hex
-          .split('')
-          .map((c) => parseInt(c, 16).toString(2).padStart(4, '0'))
-          .join('');
+        // Convert hexadecimal string to BigInt
+        return BigInt(`0x${hex}`);
       } catch (_error) {
         return undefined;
       }
@@ -51,4 +48,4 @@ const UUIDv7toBinary = (uuid: string | Buffer): UUIDv7toBinaryTuple => {
   return undefined;
 };
 
-export { UUIDv7toBinary, type UUIDv7toBinaryTuple };
+export { type UUIDv7toUnsignedInteger, uuidv7toUnsignedInteger };

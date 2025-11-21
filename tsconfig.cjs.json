@@ -16,9 +16,9 @@
     "src/isBuffer.ts",
     "src/stringify.ts",
     "src/convertBufferToUUIDString.ts",
-    "src/UUIDv7toBinary.ts",
-    "src/UUIDv7toUnsignedInteger.ts",
-    "src/UUIDv7withURNWrapper.ts"
+    "src/uuidv7toBinary.ts",
+    "src/uuidv7toUnsignedInteger.ts",
+    "src/uuidv7withURNWrapper.ts"
   ],
   "exclude": ["src/**/*.test.ts"]
 }

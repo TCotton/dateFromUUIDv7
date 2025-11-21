@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
-import { uuidVersionValidation } from './uuidVersionValidation.js';
+import { uuidVersionValidation } from './index.js';
 
 describe('uuidVersionValidation', () => {
   it('should return v1 for a version 1 UUID', () => {

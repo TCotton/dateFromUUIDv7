@@ -1,7 +1,7 @@
 import { handleBuffer } from './handleBuffer.js';
 import { uuidRegex } from './uuidRegex.js';
 
-type DateFromUUIDv7Result =
+type DateFromUUIDv7 =
   | {
       dateToIsoString: string;
       dateUnixEpoch: number;
@@ -9,7 +9,7 @@ type DateFromUUIDv7Result =
     }
   | undefined;
 
-const dateFromUUIDv7 = (uuid: string | Buffer): DateFromUUIDv7Result => {
+const dateFromUUIDv7 = (uuid: string | Buffer): DateFromUUIDv7 => {
   const uuidString = handleBuffer(uuid);
   // Validate UUID format using uuidRegex
   const match: RegExpMatchArray | null = uuidRegex(uuidString);
@@ -41,4 +41,4 @@ const dateFromUUIDv7 = (uuid: string | Buffer): DateFromUUIDv7Result => {
   return undefined;
 };
 
-export { dateFromUUIDv7, type DateFromUUIDv7Result };
+export { dateFromUUIDv7, type DateFromUUIDv7 };

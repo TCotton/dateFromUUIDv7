@@ -34,6 +34,7 @@
     "lint": "biome lint .",
     "lint:fix": "biome lint --write .",
     "check": "biome check --write .",
+    "typecheck": "tsc --noEmit",
     "test": "tsc -p tsconfig.test.json && echo '{\"type\": \"module\"}' > dist/test/package.json && node --test dist/test/*.test.js",
     "prepublishOnly": " npm run check && npm run build"
   },
