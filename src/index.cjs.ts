@@ -10,6 +10,10 @@ import {
   type UUIDv7toBinaryTuple as _UUIDv7toBinaryTuple,
   UUIDv7toBinary as _UUIDv7toBinary,
 } from './UUIDv7toBinary.js';
+import {
+  type UUIDv7toUnsignedIntegerType as _UUIDv7toUnsignedIntegerType,
+  UUIDv7toUnsignedInteger as _UUIDv7toUnsignedInteger,
+} from './UUIDv7toUnsignedInteger.js';
 
 /**
  * Extract date information from a UUIDv7.
@@ -68,3 +72,21 @@ export const UUIDv7toBinary = _UUIDv7toBinary;
  * instead of `const { UUIDv7toBinaryTuple } = require('uuidv7-utilities')`
  */
 export type UUIDv7toBinaryTuple = _UUIDv7toBinaryTuple;
+
+/**
+ * Convert UUIDv7 to unsigned integer representation.
+ *
+ * @deprecated CommonJS support is deprecated and will be removed in future versions
+ * Please migrate to ES modules: `import type { UUIDv7toUnsignedIntegerType } from 'uuidv7-utilities'`
+ * instead of `const { UUIDv7toUnsignedIntegerType } = require('uuidv7-utilities')`
+ */
+export type UUIDv7toUnsignedIntegerType = _UUIDv7toUnsignedIntegerType;
+
+/**
+ * Convert UUIDv7 to unsigned integer representation.
+ *
+ * @deprecated CommonJS support is deprecated and will be removed in future versions
+ * Please migrate to ES modules: `import { UUIDv7toUnsignedInteger } from 'uuidv7-utilities'`
+ *
+ */
+export const UUIDv7toUnsignedInteger = _UUIDv7toUnsignedInteger;
